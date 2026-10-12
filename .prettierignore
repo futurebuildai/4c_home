@@ -1,0 +1,8 @@
+node_modules
+.expo
+dist
+functions/*/dist
+ios
+android
+package-lock.json
+docs/design/handoff
