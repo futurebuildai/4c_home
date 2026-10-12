@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/organic-e2494732-0117-4410-8c6e-e477eacc301d/styles.css">
+<script src="_ds/organic-e2494732-0117-4410-8c6e-e477eacc301d/_ds_bundle.js"></script>
+<style>body{margin:0;background:var(--color-bg);font-family:var(--font-body);color:var(--color-text)}a{color:var(--color-accent-700)}a:hover{color:var(--color-accent-800)}*{box-sizing:border-box}button{font-family:inherit}</style>
+</helmet>
+<div style="min-height:100vh;display:flex;flex-wrap:wrap;gap:48px;align-items:flex-start;justify-content:center;padding:48px 24px">
+  <div style="max-width:300px;display:flex;flex-direction:column;gap:22px;padding-top:24px">
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <div style="width:52px;height:52px;border-radius:50%;background:var(--color-accent);color:var(--color-bg);display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-size:20px">4C</div>
+      <h1 style="margin:8px 0 0;font-family:var(--font-heading);font-weight:400;font-size:34px;line-height:1.05">4C Home Manager</h1>
+      <p style="margin:0;font-size:15px;line-height:1.5;color:var(--color-neutral-700);text-wrap:pretty">Prototype for Colton, Kristin and Abby. Pick who you're viewing as, then click through.</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div style="font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--color-neutral-600)">Viewing as</div>
+      <sc-for list="{{ roleBtns }}" as="r" hint-placeholder-count="3">
+        <button onClick="{{ r.onClick }}" style="{{ r.style }}">
+          <span style="{{ r.avStyle }}">{{ r.init }}</span>
+          <span style="display:flex;flex-direction:column;align-items:flex-start;gap:1px"><span style="font-size:15px;font-weight:700">{{ r.name }}</span><span style="font-size:12px;opacity:.75">{{ r.sub }}</span></span>
+        </button>
+      </sc-for>
+    </div>
+    <sc-if value="{{ showGuide }}" hint-placeholder-val="{{ true }}">
+      <div style="background:var(--color-surface);border-radius:var(--radius-lg);padding:18px 20px;display:flex;flex-direction:column;gap:10px">
+        <div style="font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--color-neutral-600)">Try this</div>
+        <ol style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.45;color:var(--color-neutral-800)">
+          <li>Nanny tab → tap <b>Propose</b> on Thursday's gap.</li>
+          <li>Switch to Abby → accept it on her Schedule.</li>
+          <li>Abby → Schedule → <b>Add time off</b> weeks ahead; Colton sees it flagged on the Nanny tab.</li>
+          <li>Abby → Earnings → adjust hours, then send the Zelle reminder.</li>
+          <li>Back as Colton → mark the week paid.</li>
+          <li>Calendar → + → add "Date night" Saturday with "Need Abby" on.</li>
+        </ol>
+      </div>
+    </sc-if>
+  </div>
+
+  <x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+    <div style="height:100%;position:relative;overflow:hidden;background:var(--color-bg);font-family:var(--font-body);color:var(--color-text)">
+      <div style="position:absolute;inset:0;overflow-y:auto;padding:58px 0 118px">
+
+        <sc-if value="{{ tab.calendar }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="padding:0 20px;display:flex;align-items:flex-end;justify-content:space-between;gap:12px">
+              <div style="min-width:0">
+                <div style="font-size:13px;font-weight:700;color:var(--color-neutral-600)">{{ calSub }}</div>
+                <h2 style="margin:2px 0 0;font-family:var(--font-heading);font-weight:400;font-size:30px;line-height:1.05">{{ calTitle }}</h2>
+              </div>
+              <div style="display:flex;gap:6px;align-items:center">
+                <sc-if value="{{ showTodayBtn }}"><button onClick="{{ goToday }}" class="btn btn-secondary" style="height:40px;padding:0 12px;font-size:13px;font-weight:700">Today</button></sc-if>
+                <button onClick="{{ navPrev }}" class="btn btn-secondary btn-icon" style="width:40px;height:40px">{{ ic.left }}</button>
+                <button onClick="{{ navNext }}" class="btn btn-secondary btn-icon" style="width:40px;height:40px">{{ ic.right }}</button>
+              </div>
+            </div>
+            <div style="margin:0 20px;display:flex;gap:4px;padding:4px;border-radius:999px;background:var(--color-surface)">
+              <sc-for list="{{ viewTabs }}" as="vt" hint-placeholder-count="3"><button onClick="{{ vt.onClick }}" style="{{ vt.style }}">{{ vt.label }}</button></sc-for>
+            </div>
+            <div style="display:flex;gap:8px;padding:0 20px;overflow-x:auto">
+              <sc-for list="{{ calFilters }}" as="f" hint-placeholder-count="4">
+                <button onClick="{{ f.onClick }}" style="{{ f.style }}"><span style="{{ f.dot }}"></span>{{ f.label }}</button>
+              </sc-for>
+            </div>
+            <sc-if value="{{ notMonth }}" hint-placeholder-val="{{ true }}">
+              <div style="padding:0 8px 0 4px">
+                <div style="display:grid;grid-template-columns:30px repeat(7,minmax(0,1fr));padding-bottom:6px">
+                  <div></div>
+                  <sc-for list="{{ weekHead }}" as="h" hint-placeholder-count="7">
+                    <div onClick="{{ h.onClick }}" style="display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer">
+                      <span style="font-size:10.5px;font-weight:700;color:var(--color-neutral-600)">{{ h.dl }}</span>
+                      <span style="{{ h.style }}">{{ h.date }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+                <sc-if value="{{ hasAllDay }}">
+                  <div style="{{ allDayRow }}">
+                    <div style="font-size:9px;font-weight:700;color:var(--color-neutral-600);text-align:right;padding:5px 5px 0 0">all-day</div>
+                    <sc-for list="{{ grid }}" as="col"><div style="display:flex;flex-direction:column;gap:2px;padding:2px;min-width:0"><sc-for list="{{ col.allDay }}" as="ad"><div onClick="{{ ad.onClick }}" style="{{ ad.style }}">{{ ad.label }}</div></sc-for></div></sc-for>
+                  </div>
+                </sc-if>
+                <div style="{{ gridStyle }}">
+                  <div style="display:flex;flex-direction:column">
+                    <sc-for list="{{ hours }}" as="hr" hint-placeholder-count="15">
+                      <div style="height:36px;font-size:9.5px;font-weight:600;color:var(--color-neutral-600);text-align:right;padding-right:5px;transform:translateY(-6px)">{{ hr }}</div>
+                    </sc-for>
+                  </div>
+                  <sc-for list="{{ grid }}" as="col" hint-placeholder-count="7">
+                    <div style="position:relative;border-left:1px solid var(--color-divider);background-image:repeating-linear-gradient(to bottom, var(--color-divider) 0 1px, transparent 1px 36px)">
+                      <sc-if value="{{ col.isToday }}"><div style="position:absolute;inset:0;background:color-mix(in srgb, var(--color-accent-200) 45%, transparent)"></div></sc-if>
+                      <sc-for list="{{ col.cover }}" as="cv"><div onClick="{{ cv.onClick }}" style="{{ cv.style }}"></div></sc-for>
+                      <sc-for list="{{ col.blocks }}" as="b">
+                        <div onClick="{{ b.onClick }}" style="{{ b.style }}">
+                          <div style="font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ b.title }}</div>
+                          <sc-if value="{{ b.showTime }}"><div style="font-weight:600;opacity:.8;margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ b.time }}</div></sc-if>
+                        </div>
+                      </sc-for>
+                      <sc-if value="{{ col.isToday }}"><div style="{{ nowStyle }}"><div style="position:absolute;left:-4px;top:-4px;width:9px;height:9px;border-radius:50%;background:var(--color-accent-700)"></div></div></sc-if>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ isMonth }}" hint-placeholder-val="{{ false }}">
+              <div style="padding:0 12px;display:flex;flex-direction:column;gap:4px">
+                <div style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;font-size:10.5px;font-weight:700;color:var(--color-neutral-600);text-align:center">
+                  <div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div><div>S</div>
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px">
+                  <sc-for list="{{ monthCells }}" as="mc" hint-placeholder-count="35">
+                    <div onClick="{{ mc.onClick }}" style="{{ mc.cellStyle }}">
+                      <span style="{{ mc.numStyle }}">{{ mc.date }}</span>
+                      <sc-for list="{{ mc.items }}" as="mi"><span style="{{ mi.style }}">{{ mi.label }}</span></sc-for>
+                      <sc-if value="{{ mc.hasMore }}"><span style="font-size:9px;font-weight:800;color:var(--color-neutral-700);padding-left:3px">{{ mc.more }}</span></sc-if>
+                      <sc-if value="{{ mc.cover }}"><span style="margin-top:auto;height:4px;border-radius:9px;background:oklch(0.78 0.12 82)"></span></sc-if>
+                    </div>
+                  </sc-for>
+                </div>
+                <div style="font-size:12px;color:var(--color-neutral-700);padding:6px 4px 0;display:flex;align-items:center;gap:6px"><span style="width:14px;height:4px;border-radius:9px;background:oklch(0.78 0.12 82)"></span>{{ monthLegend }} · tap a day to open it</div>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ tab.nanny }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:14px;padding:0 16px">
+            <div style="padding:0 4px">
+              <div style="font-size:13px;font-weight:700;color:var(--color-neutral-600)">Oct 12 – 18 · Abby</div>
+              <h2 style="margin:2px 0 0;font-family:var(--font-heading);font-weight:400;font-size:32px;line-height:1.05">Nanny schedule</h2>
+            </div>
+            <sc-for list="{{ payCards }}" as="pc">
+              <div style="background:var(--color-accent-2-200);border-radius:var(--radius-lg);padding:16px 18px;display:flex;flex-direction:column;gap:10px">
+                <div style="display:flex;align-items:center;gap:8px;color:var(--color-accent-2-800);font-size:12.5px;font-weight:700">{{ ic.dollarS }}<span>Abby requested payment · {{ pc.sentAt }}</span></div>
+                <div style="display:flex;align-items:baseline;justify-content:space-between;gap:8px">
+                  <div style="font-family:var(--font-heading);font-size:30px;color:var(--color-accent-2-900)">{{ pc.amount }}</div>
+                  <div style="font-size:13px;font-weight:700;color:var(--color-accent-2-800)">{{ pc.label }} · {{ pc.hours }}</div>
+                </div>
+                <div style="display:flex;gap:8px">
+                  <button onClick="{{ openZelleApp }}" class="btn btn-secondary" style="flex:1;min-height:44px;font-weight:700;border-color:var(--color-accent-2-600);color:var(--color-accent-2-900)">Open Zelle</button>
+                  <button onClick="{{ pc.onPaid }}" class="btn btn-primary" style="flex:1;min-height:44px;font-weight:700">Mark paid</button>
+                </div>
+              </div>
+            </sc-for>
+            <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px">
+              <div style="background:var(--color-surface);border-radius:var(--radius-md);padding:12px">
+                <div style="font-family:var(--font-heading);font-size:22px">{{ nanny.agreedH }}</div>
+                <div style="font-size:11.5px;font-weight:700;color:var(--color-neutral-700)">agreed</div>
+              </div>
+              <div style="background:var(--color-surface);border-radius:var(--radius-md);padding:12px">
+                <div style="font-family:var(--font-heading);font-size:22px">{{ nanny.cost }}</div>
+                <div style="font-size:11.5px;font-weight:700;color:var(--color-neutral-700)">projected</div>
+              </div>
+              <div style="{{ nanny.gapBox }}">
+                <div style="font-family:var(--font-heading);font-size:22px">{{ nanny.gapCount }}</div>
+                <div style="font-size:11.5px;font-weight:700">uncovered</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:11.5px;font-weight:700;color:var(--color-neutral-700);padding:0 4px">
+              <span style="display:flex;align-items:center;gap:5px"><span style="width:14px;height:8px;border-radius:9px;background:var(--color-accent-300)"></span>We need</span>
+              <span style="display:flex;align-items:center;gap:5px"><span style="width:14px;height:8px;border-radius:9px;background:oklch(0.85 0.09 85)"></span>Abby free</span>
+              <span style="display:flex;align-items:center;gap:5px"><span style="width:14px;height:8px;border-radius:9px;background:var(--color-accent-2-400)"></span>Agreed</span>
+              <span style="display:flex;align-items:center;gap:5px"><span style="width:14px;height:8px;border-radius:9px;background:repeating-linear-gradient(135deg, var(--color-accent-600) 0 3px, var(--color-accent-200) 3px 6px)"></span>Gap</span>
+            </div>
+            <div style="font-size:12.5px;color:var(--color-neutral-700);padding:0 4px">Tap a day to change when you need care.</div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ tab.schedule }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:14px;padding:0 16px">
+            <div style="padding:0 4px">
+              <div style="font-size:13px;font-weight:700;color:var(--color-neutral-600)">Oct 12 – 18 · Colton &amp; Kristin</div>
+              <h2 style="margin:2px 0 0;font-family:var(--font-heading);font-weight:400;font-size:32px;line-height:1.05">Your week</h2>
+            </div>
+            <sc-for list="{{ pendingProps }}" as="pp">
+              <div style="background:var(--color-accent-200);border-radius:var(--radius-lg);padding:16px 18px;display:flex;flex-direction:column;gap:10px">
+                <div style="display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:var(--color-accent-800)">{{ ic.bellS }}<span>Request from Colton &amp; Kristin</span></div>
+                <div style="font-family:var(--font-heading);font-size:22px;color:var(--color-accent-900)">{{ pp.when }}</div>
+                <div style="font-size:14px;line-height:1.45;color:var(--color-accent-900)">"{{ pp.note }}"</div>
+                <div style="display:flex;gap:8px">
+                  <button onClick="{{ pp.onDecline }}" class="btn btn-secondary" style="flex:1;min-height:44px;font-weight:700;border-color:var(--color-accent-600);color:var(--color-accent-900)">Decline</button>
+                  <button onClick="{{ pp.onAccept }}" class="btn btn-primary" style="flex:1;min-height:44px;font-weight:700">Accept</button>
+                </div>
+              </div>
+            </sc-for>
+            <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
+              <div style="background:var(--color-surface);border-radius:var(--radius-md);padding:12px 14px">
+                <div style="font-family:var(--font-heading);font-size:22px">{{ nanny.agreedH }}</div>
+                <div style="font-size:11.5px;font-weight:700;color:var(--color-neutral-700)">agreed shifts</div>
+              </div>
+              <div style="background:var(--color-surface);border-radius:var(--radius-md);padding:12px 14px">
+                <div style="font-family:var(--font-heading);font-size:22px">{{ nanny.cost }}</div>
+                <div style="font-size:11.5px;font-weight:700;color:var(--color-neutral-700)">projected pay</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:11.5px;font-weight:700;color:var(--color-neutral-700);padding:0 4px">
+              <span style="display:flex;align-items:center;gap:5px"><span style="width:14px;height:8px;border-radius:9px;background:var(--color-accent-300)"></span>Family needs</span>
+              <span style="display:flex;align-items:center;gap:5px"><span style="width:14px;height:8px;border-radius:9px;background:oklch(0.85 0.09 85)"></span>You're free</span>
+              <span style="display:flex;align-items:center;gap:5px"><span style="width:14px;height:8px;border-radius:9px;background:var(--color-accent-2-400)"></span>Agreed</span>
+              <span style="display:flex;align-items:center;gap:5px"><span style="width:14px;height:8px;border-radius:9px;background:var(--color-neutral-300)"></span>Your calendar</span>
+            </div>
+            <div style="font-size:12.5px;color:var(--color-neutral-700);padding:0 4px">Tap a day to publish your availability. Only you see your calendar events.</div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ showDays }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:14px 16px 4px">
+            <div style="background:var(--color-surface);border-radius:var(--radius-lg);padding:16px 18px;display:flex;flex-direction:column;gap:12px">
+              <div style="display:flex;align-items:center;gap:10px">
+                <div style="width:36px;height:36px;border-radius:50%;background:oklch(0.9 0.07 85);color:oklch(0.4 0.08 70);display:flex;align-items:center;justify-content:center">{{ ic.calS }}</div>
+                <div style="flex:1;display:flex;flex-direction:column;gap:1px">
+                  <div style="font-size:15px;font-weight:800">{{ offTitle }}</div>
+                  <div style="font-size:12.5px;color:var(--color-neutral-700)">{{ offSub }}</div>
+                </div>
+              </div>
+              <sc-for list="{{ timeOff }}" as="to">
+                <div style="display:flex;align-items:center;gap:12px">
+                  <div style="width:46px;height:46px;flex:none;border-radius:50%;background:var(--color-bg);display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1">
+                    <span style="font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--color-accent-700)">{{ to.mon }}</span>
+                    <span style="font-family:var(--font-heading);font-size:18px">{{ to.day }}</span>
+                  </div>
+                  <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:3px">
+                    <div style="font-size:14.5px;font-weight:800">{{ to.reason }}</div>
+                    <div style="font-size:12.5px;color:var(--color-neutral-700)">{{ to.when }}</div>
+                    <div style="display:flex"><span class="{{ to.cls }}" style="font-weight:700">{{ to.conflict }}</span></div>
+                  </div>
+                  <sc-if value="{{ isNanny }}"><button onClick="{{ to.onRemove }}" class="btn btn-ghost btn-icon" style="color:var(--color-neutral-700)">{{ ic.xS }}</button></sc-if>
+                </div>
+              </sc-for>
+              <sc-if value="{{ noTimeOff }}"><div style="font-size:13px;color:var(--color-neutral-700)">Nothing planned.</div></sc-if>
+              <sc-if value="{{ isNanny }}"><button onClick="{{ openTimeOff }}" class="btn btn-primary" style="min-height:44px;font-weight:700;gap:6px">{{ ic.plusS }}Add time off</button></sc-if>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;padding:10px 16px 0">
+            <div style="position:relative;height:14px;margin-left:68px;margin-right:14px;font-size:10px;font-weight:700;color:var(--color-neutral-600)">
+              <span style="position:absolute;left:0%">7a</span><span style="position:absolute;left:23%">10a</span><span style="position:absolute;left:46%">1p</span><span style="position:absolute;left:69%">4p</span><span style="position:absolute;left:91%">7p</span>
+            </div>
+            <sc-for list="{{ dayRows }}" as="row" hint-placeholder-count="7">
+              <div onClick="{{ row.onEdit }}" style="background:var(--color-surface);border-radius:var(--radius-md);padding:12px 14px;display:flex;flex-direction:column;gap:7px;cursor:pointer">
+                <div style="display:flex;align-items:center;gap:8px">
+                  <div style="font-weight:800;font-size:15px">{{ row.dn }} <span style="font-weight:600;color:var(--color-neutral-600)">{{ row.date }}</span></div>
+                  <sc-if value="{{ row.isToday }}"><span class="tag tag-accent" style="font-weight:700">Today</span></sc-if>
+                  <div style="flex:1"></div>
+                  <div style="font-size:13px;font-weight:800;color:var(--color-accent-2-800)">{{ row.agreedLabel }}</div>
+                </div>
+                <sc-if value="{{ row.isEmpty }}">
+                  <div style="font-size:13px;color:var(--color-neutral-600)">{{ row.emptyText }}</div>
+                </sc-if>
+                <sc-if value="{{ row.notEmpty }}">
+                  <div style="display:flex;flex-direction:column;gap:5px">
+                    <div style="display:flex;align-items:center;gap:8px"><div style="width:46px;font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--color-neutral-600)">Need</div><div style="flex:1;position:relative;height:8px;border-radius:9px;background:color-mix(in srgb, var(--color-text) 7%, transparent)"><sc-for list="{{ row.needBars }}" as="x"><div style="{{ x.style }}"></div></sc-for><sc-for list="{{ row.gapBars }}" as="x"><div style="{{ x.style }}"></div></sc-for></div></div>
+                    <div style="display:flex;align-items:center;gap:8px"><div style="width:46px;font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--color-neutral-600)">{{ abbyLabel }}</div><div style="flex:1;position:relative;height:8px;border-radius:9px;background:color-mix(in srgb, var(--color-text) 7%, transparent)"><sc-for list="{{ row.availBars }}" as="x"><div style="{{ x.style }}"></div></sc-for></div></div>
+                    <sc-if value="{{ row.showPersonal }}">
+                      <div style="display:flex;align-items:center;gap:8px"><div style="width:46px;font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--color-neutral-600)">Cal</div><div style="flex:1;position:relative;height:8px;border-radius:9px;background:color-mix(in srgb, var(--color-text) 7%, transparent)"><sc-for list="{{ row.personalBars }}" as="x"><div style="{{ x.style }}"></div></sc-for></div></div>
+                    </sc-if>
+                    <div style="display:flex;align-items:center;gap:8px"><div style="width:46px;font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--color-accent-2-800)">Agreed</div><div style="flex:1;position:relative;height:20px;border-radius:9px;background:color-mix(in srgb, var(--color-text) 5%, transparent)"><sc-for list="{{ row.agreedBars }}" as="x"><div style="{{ x.style }}">{{ x.label }}</div></sc-for></div></div>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ row.personalNote }}">
+                  <div style="font-size:12px;color:var(--color-neutral-700)">{{ row.personalText }}</div>
+                </sc-if>
+                <sc-if value="{{ row.hasGaps }}">
+                  <div style="display:flex;align-items:center;gap:8px;padding-top:2px">
+                    <span style="color:var(--color-accent-700)">{{ ic.alertS }}</span>
+                    <span style="flex:1;font-size:13px;font-weight:700;color:var(--color-accent-800)">{{ row.gapText }}</span>
+                    <sc-if value="{{ row.showPropose }}"><button onClick="{{ row.onPropose }}" class="btn btn-primary" style="min-height:34px;padding:0 14px;font-size:13px;font-weight:700">Propose</button></sc-if>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ row.hasStatus }}">
+                  <div style="display:flex"><span class="{{ row.statusClass }}" style="font-weight:700">{{ row.statusText }}</span></div>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ tab.earnings }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:14px;padding:0 16px">
+            <div style="padding:0 4px">
+              <div style="font-size:13px;font-weight:700;color:var(--color-neutral-600)">Week of Oct 12 · {{ rateLabel }}</div>
+              <h2 style="margin:2px 0 0;font-family:var(--font-heading);font-weight:400;font-size:32px;line-height:1.05">Earnings</h2>
+            </div>
+            <div style="background:var(--color-accent-2-200);border-radius:var(--radius-lg);padding:20px;display:flex;flex-direction:column;gap:12px">
+              <div style="font-size:13px;font-weight:700;color:var(--color-accent-2-800)">Earned so far this week</div>
+              <div style="font-family:var(--font-heading);font-size:46px;line-height:1;color:var(--color-accent-2-900)">{{ earn.earned }}</div>
+              <div style="height:12px;border-radius:9px;background:color-mix(in srgb, var(--color-accent-2-900) 12%, transparent);overflow:hidden"><div style="{{ earn.barStyle }}"></div></div>
+              <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;color:var(--color-accent-2-800)"><span>{{ earn.earnedH }} worked</span><span>{{ earn.projected }} projected · {{ earn.projH }}</span></div>
+            </div>
+            <div style="background:var(--color-surface);border-radius:var(--radius-lg);padding:16px 18px;display:flex;flex-direction:column;gap:12px">
+              <div style="display:flex;align-items:center;gap:10px">
+                <div style="width:40px;height:40px;border-radius:50%;background:var(--color-accent-200);color:var(--color-accent-800);display:flex;align-items:center;justify-content:center">{{ ic.send }}</div>
+                <div style="flex:1;display:flex;flex-direction:column;gap:1px">
+                  <div style="font-size:15px;font-weight:800">Zelle reminder</div>
+                  <div style="font-size:13px;color:var(--color-neutral-700)">{{ earn.reminderText }}</div>
+                </div>
+              </div>
+              <sc-if value="{{ earn.canSend }}">
+                <button onClick="{{ openZelleSheet }}" class="btn btn-primary" style="min-height:46px;font-weight:700">Review &amp; send now</button>
+              </sc-if>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:2px">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;padding:0 4px 6px"><div style="font-size:15px;font-weight:800">Hours this week</div><div style="font-size:12px;color:var(--color-neutral-700)">Adjust before invoicing</div></div>
+              <sc-for list="{{ earn.rows }}" as="er" hint-placeholder-count="5">
+                <div style="display:flex;align-items:center;gap:10px;padding:10px 4px;border-bottom:1px solid var(--color-divider)">
+                  <div style="flex:1;display:flex;flex-direction:column;gap:2px">
+                    <div style="font-size:15px;font-weight:800">{{ er.dn }} <span style="font-weight:600;color:var(--color-neutral-600)">{{ er.status }}</span></div>
+                    <div style="font-size:12.5px;color:var(--color-neutral-700)">{{ er.sub }}</div>
+                  </div>
+                  <button onClick="{{ er.onMinus }}" class="btn btn-secondary btn-icon" style="width:34px;height:34px">{{ ic.minusS }}</button>
+                  <div style="width:44px;text-align:center;font-size:15px;font-weight:800">{{ er.hours }}</div>
+                  <button onClick="{{ er.onPlus }}" class="btn btn-secondary btn-icon" style="width:34px;height:34px">{{ ic.plusS }}</button>
+                  <div style="width:64px;text-align:right;font-size:14px;font-weight:700">{{ er.amount }}</div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="background:var(--color-surface);border-radius:var(--radius-lg);padding:16px 18px;display:flex;flex-direction:column;gap:14px">
+              <div style="font-size:15px;font-weight:800">Last 4 weeks</div>
+              <div style="display:flex;align-items:flex-end;gap:14px;height:120px">
+                <sc-for list="{{ earn.history }}" as="hb" hint-placeholder-count="4">
+                  <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px">
+                    <div style="font-size:11.5px;font-weight:800">{{ hb.amt }}</div>
+                    <div style="{{ hb.style }}"></div>
+                    <div style="font-size:11px;font-weight:700;color:var(--color-neutral-700)">{{ hb.label }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column">
+              <div style="font-size:15px;font-weight:800;padding:0 4px 6px">Payments</div>
+              <sc-for list="{{ earn.invoices }}" as="inv">
+                <div style="display:flex;align-items:center;gap:10px;padding:11px 4px;border-bottom:1px solid var(--color-divider)">
+                  <div style="flex:1;display:flex;flex-direction:column;gap:2px"><div style="font-size:14.5px;font-weight:700">{{ inv.label }}</div><div style="font-size:12.5px;color:var(--color-neutral-700)">{{ inv.hours }}</div></div>
+                  <div style="font-size:14.5px;font-weight:800">{{ inv.amount }}</div>
+                  <span class="{{ inv.cls }}" style="font-weight:700">{{ inv.status }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ tab.tasks }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div style="padding:0 20px">
+              <div style="font-size:13px;font-weight:700;color:var(--color-neutral-600)">Colton &amp; Kristin only</div>
+              <h2 style="margin:2px 0 0;font-family:var(--font-heading);font-weight:400;font-size:32px;line-height:1.05">Task board</h2>
+            </div>
+            <div style="margin:0 16px;background:var(--color-surface);border-radius:var(--radius-lg);padding:14px 16px;display:flex;align-items:center;gap:12px">
+              <div style="width:40px;height:40px;border-radius:50%;background:oklch(0.9 0.07 85);color:oklch(0.4 0.08 70);display:flex;align-items:center;justify-content:center">{{ ic.bell }}</div>
+              <div style="flex:1;display:flex;flex-direction:column;gap:1px">
+                <div style="font-size:12px;font-weight:700;color:var(--color-neutral-700)">{{ taskSum.counts }}</div>
+                <div style="font-size:14.5px;font-weight:800">{{ taskSum.next }}</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:12px;overflow-x:auto;padding:0 16px 8px;scroll-snap-type:x mandatory">
+              <sc-for list="{{ taskCols }}" as="tc" hint-placeholder-count="3">
+                <div style="flex:none;width:300px;scroll-snap-align:start;background:color-mix(in srgb, var(--color-surface) 60%, transparent);border-radius:var(--radius-lg);padding:12px;display:flex;flex-direction:column;gap:8px">
+                  <div style="display:flex;align-items:center;gap:8px;padding:2px 6px 4px"><span style="font-size:15px;font-weight:800">{{ tc.name }}</span><span class="tag tag-neutral" style="font-weight:700">{{ tc.count }}</span></div>
+                  <sc-for list="{{ tc.cards }}" as="t">
+                    <div onClick="{{ t.onOpen }}" style="background:var(--color-bg);border-radius:var(--radius-md);padding:12px;display:flex;gap:10px;align-items:flex-start;box-shadow:var(--shadow-sm);cursor:pointer">
+                      <button onClick="{{ t.onCheck }}" style="{{ t.checkStyle }}">{{ t.checkIcon }}</button>
+                      <div style="flex:1;display:flex;flex-direction:column;gap:8px;min-width:0">
+                        <div style="{{ t.titleStyle }}">{{ t.title }}</div>
+                        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+                          <span style="{{ t.dueStyle }}">{{ ic.clockS }}{{ t.due }}</span>
+                          <sc-if value="{{ t.hasRem }}"><span style="display:inline-flex;color:var(--color-neutral-600)">{{ ic.bellS }}</span></sc-if>
+                          <div style="flex:1"></div>
+                          <sc-for list="{{ t.avs }}" as="av"><span style="{{ av.style }}">{{ av.init }}</span></sc-for>
+                        </div>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ tab.files }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:14px;padding:0 16px">
+            <div style="padding:0 4px">
+              <div style="font-size:13px;font-weight:700;color:var(--color-neutral-600)">{{ filesSub }}</div>
+              <h2 style="margin:2px 0 0;font-family:var(--font-heading);font-weight:400;font-size:32px;line-height:1.05">Shared files</h2>
+            </div>
+            <div style="display:flex;gap:8px">
+              <sc-for list="{{ fileTabs }}" as="ft" hint-placeholder-count="3"><button onClick="{{ ft.onClick }}" style="{{ ft.style }}">{{ ft.label }}</button></sc-for>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 8px">
+              <sc-for list="{{ fileTiles }}" as="fi" hint-placeholder-count="9">
+                <div onClick="{{ fi.onOpen }}" style="display:flex;flex-direction:column;gap:5px;cursor:pointer;min-width:0">
+                  <div style="{{ fi.style }}">
+                    <span style="opacity:.55">{{ fi.icon }}</span>
+                    <sc-if value="{{ fi.isVideo }}"><span style="position:absolute;right:6px;bottom:6px;font-size:10.5px;font-weight:800;padding:2px 7px;border-radius:9px;background:var(--color-text);color:var(--color-bg)">{{ fi.dur }}</span></sc-if>
+                    <sc-if value="{{ fi.isPrivate }}"><span style="position:absolute;left:6px;top:6px;width:22px;height:22px;border-radius:50%;background:var(--color-bg);display:flex;align-items:center;justify-content:center;color:var(--color-neutral-800)">{{ ic.lockXS }}</span></sc-if>
+                    <sc-if value="{{ fi.uploading }}"><span style="position:absolute;inset:0;background:color-mix(in srgb, var(--color-bg) 60%, transparent);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800">Uploading…</span></sc-if>
+                  </div>
+                  <div style="font-size:12px;font-weight:700;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ fi.title }}</div>
+                  <div style="font-size:11px;color:var(--color-neutral-600);margin-top:-3px">{{ fi.meta }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ tab.settings }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:18px;padding:0 16px">
+            <div style="padding:0 4px">
+              <div style="font-size:13px;font-weight:700;color:var(--color-neutral-600)">{{ me.name }} · {{ me.roleLabel }}</div>
+              <h2 style="margin:2px 0 0;font-family:var(--font-heading);font-weight:400;font-size:32px;line-height:1.05">Calendars &amp; sync</h2>
+            </div>
+            <sc-if value="{{ isNanny }}">
+              <div style="background:var(--color-accent-2-200);border-radius:var(--radius-lg);padding:14px 16px;display:flex;gap:10px;align-items:flex-start;color:var(--color-accent-2-900)">
+                <span style="padding-top:1px">{{ ic.lockS }}</span>
+                <div style="font-size:13.5px;line-height:1.45">Colton &amp; Kristin only see the availability you publish — never your calendar events. You only see the nanny schedule.</div>
+              </div>
+            </sc-if>
+            <sc-for list="{{ accounts }}" as="ac">
+              <div style="background:var(--color-surface);border-radius:var(--radius-lg);padding:6px 16px">
+                <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--color-divider)">
+                  <span style="{{ ac.badgeStyle }}">{{ ac.badge }}</span>
+                  <div style="flex:1;min-width:0"><div style="font-size:15px;font-weight:800">{{ ac.provider }}</div><div style="font-size:12.5px;color:var(--color-neutral-700);overflow:hidden;text-overflow:ellipsis">{{ ac.email }}</div></div>
+                  <span class="tag tag-accent-2" style="font-weight:700">Synced</span>
+                </div>
+                <sc-for list="{{ ac.cals }}" as="cl">
+                  <div onClick="{{ cl.onToggle }}" style="display:flex;align-items:center;gap:10px;padding:11px 0;cursor:pointer">
+                    <span style="flex:1;font-size:14.5px;font-weight:600">{{ cl.name }}</span>
+                    <span style="{{ cl.track }}"><span style="{{ cl.knob }}"></span></span>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-for>
+            <button onClick="{{ openAddAcct }}" class="btn btn-secondary" style="min-height:48px;font-weight:700;gap:8px">{{ ic.plusS }}Add Google or Apple calendar</button>
+            <div style="background:var(--color-surface);border-radius:var(--radius-lg);padding:6px 16px">
+              <sc-for list="{{ prefRows }}" as="pr">
+                <div onClick="{{ pr.onToggle }}" style="display:flex;align-items:center;gap:10px;padding:12px 0;cursor:pointer">
+                  <div style="flex:1;display:flex;flex-direction:column;gap:2px"><span style="font-size:14.5px;font-weight:700">{{ pr.name }}</span><span style="font-size:12.5px;color:var(--color-neutral-700);line-height:1.35">{{ pr.sub }}</span></div>
+                  <span style="{{ pr.track }}"><span style="{{ pr.knob }}"></span></span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+
+      <sc-if value="{{ fab.show }}" hint-placeholder-val="{{ true }}">
+        <button onClick="{{ fab.onClick }}" class="btn btn-primary" style="position:absolute;right:20px;bottom:104px;width:58px;height:58px;padding:0;box-shadow:var(--shadow-lg);z-index:5">{{ ic.plusL }}</button>
+      </sc-if>
+
+      <div style="position:absolute;left:12px;right:12px;bottom:28px;height:66px;border-radius:999px;background:var(--color-surface);box-shadow:var(--shadow-md);display:flex;align-items:center;padding:0 6px;z-index:6">
+        <sc-for list="{{ tabs }}" as="tb" hint-placeholder-count="5">
+          <button onClick="{{ tb.onClick }}" style="{{ tb.style }}">{{ tb.icon }}<span style="font-size:10.5px;font-weight:800">{{ tb.label }}</span></button>
+        </sc-for>
+      </div>
+
+      <sc-if value="{{ hasToast }}">
+        <div style="position:absolute;bottom:172px;left:20px;right:20px;z-index:70;display:flex;justify-content:center;pointer-events:none">
+          <div style="background:var(--color-text);color:var(--color-bg);border-radius:999px;padding:11px 18px;font-size:13.5px;font-weight:700;box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:8px">{{ ic.checkS }}{{ toast }}</div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ sheetOpen }}">
+        <div style="position:absolute;inset:0;z-index:40;display:flex;flex-direction:column;justify-content:flex-end">
+          <div onClick="{{ closeSheet }}" style="position:absolute;inset:0;background:color-mix(in srgb, var(--color-text) 38%, transparent)"></div>
+          <div style="position:relative;background:var(--color-bg);border-radius:30px 30px 0 0;padding:10px 20px 44px;max-height:88%;overflow-y:auto;box-shadow:var(--shadow-lg);display:flex;flex-direction:column;gap:16px">
+            <div style="display:flex;justify-content:center"><div style="width:40px;height:5px;border-radius:9px;background:var(--color-neutral-300)"></div></div>
+
+            <sc-if value="{{ sh.event }}">
+              <div style="display:flex;flex-direction:column;gap:14px">
+                <div style="display:flex;align-items:center;gap:8px"><span style="{{ selEv.dot }}"></span><span style="font-size:13px;font-weight:700;color:var(--color-neutral-700)">{{ selEv.src }}</span></div>
+                <div style="font-family:var(--font-heading);font-size:28px;line-height:1.1">{{ selEv.title }}</div>
+                <div style="font-size:15px;font-weight:700">{{ selEv.when }}</div>
+                <div style="font-size:13.5px;line-height:1.45;color:var(--color-neutral-700)">{{ selEv.note }}</div>
+                <sc-if value="{{ selEv.canDelete }}"><button onClick="{{ deleteEvent }}" class="btn btn-secondary" style="min-height:46px;font-weight:700;color:var(--color-accent-800)">Delete event</button></sc-if>
+                <sc-if value="{{ selEv.isCover }}"><button onClick="{{ goNanny }}" class="btn btn-primary" style="min-height:46px;font-weight:700">Open nanny schedule</button></sc-if>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ sh.newEvent }}">
+              <div style="display:flex;flex-direction:column;gap:14px">
+                <div style="font-family:var(--font-heading);font-size:26px">New family event</div>
+                <input class="input" placeholder="Title, e.g. Date night" value="{{ draft.title }}" onChange="{{ dTitle }}" style="min-height:46px;font-size:16px">
+                <div style="display:flex;gap:6px">
+                  <sc-for list="{{ dayChips }}" as="dc"><button onClick="{{ dc.onClick }}" style="{{ dc.style }}">{{ dc.l }}</button></sc-for>
+                </div>
+                <div style="display:flex;gap:8px;align-items:center">
+                  <select class="input" value="{{ draft.s }}" onChange="{{ dS }}" style="min-height:46px;font-size:15px"><sc-for list="{{ times }}" as="o"><option value="{{ o.v }}">{{ o.l }}</option></sc-for></select>
+                  <span style="font-weight:700">to</span>
+                  <select class="input" value="{{ draft.e }}" onChange="{{ dE }}" style="min-height:46px;font-size:15px"><sc-for list="{{ times }}" as="o"><option value="{{ o.v }}">{{ o.l }}</option></sc-for></select>
+                </div>
+                <div onClick="{{ toggleNeedAbby }}" style="display:flex;align-items:center;gap:10px;background:var(--color-surface);border-radius:var(--radius-md);padding:12px 14px;cursor:pointer">
+                  <div style="flex:1;display:flex;flex-direction:column;gap:2px"><span style="font-size:14.5px;font-weight:800">Need Abby for this?</span><span style="font-size:12.5px;color:var(--color-neutral-700)">Adds it to the nanny schedule and checks her availability</span></div>
+                  <span style="{{ needSw.track }}"><span style="{{ needSw.knob }}"></span></span>
+                </div>
+                <div style="font-size:12.5px;color:var(--color-neutral-700)">Saves to the 4C Family calendar and mirrors to Colton's and Kristin's iPhone calendars.</div>
+                <button onClick="{{ saveEvent }}" class="btn btn-primary" style="min-height:50px;font-weight:800;font-size:16px">Save event</button>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ sh.editDay }}">
+              <div style="display:flex;flex-direction:column;gap:14px">
+                <div style="font-size:13px;font-weight:700;color:var(--color-neutral-700)">{{ editDay.kicker }}</div>
+                <div style="font-family:var(--font-heading);font-size:26px">{{ editDay.title }}</div>
+                <div style="display:flex;gap:8px;align-items:center">
+                  <select class="input" value="{{ draft.s }}" onChange="{{ dS }}" style="min-height:46px;font-size:15px"><sc-for list="{{ times }}" as="o"><option value="{{ o.v }}">{{ o.l }}</option></sc-for></select>
+                  <span style="font-weight:700">to</span>
+                  <select class="input" value="{{ draft.e }}" onChange="{{ dE }}" style="min-height:46px;font-size:15px"><sc-for list="{{ times }}" as="o"><option value="{{ o.v }}">{{ o.l }}</option></sc-for></select>
+                </div>
+                <div onClick="{{ toggleOff }}" style="display:flex;align-items:center;gap:10px;background:var(--color-surface);border-radius:var(--radius-md);padding:12px 14px;cursor:pointer">
+                  <span style="flex:1;font-size:14.5px;font-weight:800">{{ editDay.offLabel }}</span>
+                  <span style="{{ offSw.track }}"><span style="{{ offSw.knob }}"></span></span>
+                </div>
+                <div style="font-size:12.5px;color:var(--color-neutral-700)">{{ editDay.hint }}</div>
+                <button onClick="{{ saveDay }}" class="btn btn-primary" style="min-height:50px;font-weight:800;font-size:16px">{{ editDay.cta }}</button>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ sh.propose }}">
+              <div style="display:flex;flex-direction:column;gap:14px">
+                <div style="font-size:13px;font-weight:700;color:var(--color-accent-800)">Uncovered time</div>
+                <div style="font-family:var(--font-heading);font-size:26px">Ask Abby to cover</div>
+                <div style="display:flex;gap:8px;align-items:center">
+                  <select class="input" value="{{ draft.s }}" onChange="{{ dS }}" style="min-height:46px;font-size:15px"><sc-for list="{{ times }}" as="o"><option value="{{ o.v }}">{{ o.l }}</option></sc-for></select>
+                  <span style="font-weight:700">to</span>
+                  <select class="input" value="{{ draft.e }}" onChange="{{ dE }}" style="min-height:46px;font-size:15px"><sc-for list="{{ times }}" as="o"><option value="{{ o.v }}">{{ o.l }}</option></sc-for></select>
+                </div>
+                <textarea class="input" value="{{ draft.note }}" onChange="{{ dNote }}" style="border-radius:var(--radius-md);font-size:15px;line-height:1.45"></textarea>
+                <div style="font-size:12.5px;color:var(--color-neutral-700)">Abby gets a notification. If she accepts, it's added to the agreed schedule and her pay.</div>
+                <button onClick="{{ sendProposal }}" class="btn btn-primary" style="min-height:50px;font-weight:800;font-size:16px">Send to Abby</button>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ sh.timeOff }}">
+              <div style="display:flex;flex-direction:column;gap:14px">
+                <div style="font-family:var(--font-heading);font-size:26px">Add time off</div>
+                <div style="font-size:13px;font-weight:800">Date</div>
+                <select class="input" value="{{ draft.d }}" onChange="{{ dOffD }}" style="min-height:46px;font-size:15px"><sc-for list="{{ offDates }}" as="o"><option value="{{ o.v }}">{{ o.l }}</option></sc-for></select>
+                <div onClick="{{ toggleAllDay }}" style="display:flex;align-items:center;gap:10px;background:var(--color-surface);border-radius:var(--radius-md);padding:12px 14px;cursor:pointer">
+                  <span style="flex:1;font-size:14.5px;font-weight:800">All day</span>
+                  <span style="{{ allDaySw.track }}"><span style="{{ allDaySw.knob }}"></span></span>
+                </div>
+                <sc-if value="{{ draftAllDay }}">
+                  <div style="font-size:13px;font-weight:800">Through</div>
+                  <select class="input" value="{{ draft.end }}" onChange="{{ dOffEnd }}" style="min-height:46px;font-size:15px"><sc-for list="{{ offEndDates }}" as="o"><option value="{{ o.v }}">{{ o.l }}</option></sc-for></select>
+                </sc-if>
+                <sc-if value="{{ draftPartDay }}">
+                  <div style="display:flex;gap:8px;align-items:center">
+                    <select class="input" value="{{ draft.s }}" onChange="{{ dS }}" style="min-height:46px;font-size:15px"><sc-for list="{{ times }}" as="o"><option value="{{ o.v }}">{{ o.l }}</option></sc-for></select>
+                    <span style="font-weight:700">to</span>
+                    <select class="input" value="{{ draft.e }}" onChange="{{ dE }}" style="min-height:46px;font-size:15px"><sc-for list="{{ times }}" as="o"><option value="{{ o.v }}">{{ o.l }}</option></sc-for></select>
+                  </div>
+                </sc-if>
+                <input class="input" placeholder="Reason, e.g. Doctor appointment" value="{{ draft.reason }}" onChange="{{ dReason }}" style="min-height:46px;font-size:16px">
+                <div onClick="{{ toggleShare }}" style="display:flex;align-items:center;gap:10px;background:var(--color-surface);border-radius:var(--radius-md);padding:12px 14px;cursor:pointer">
+                  <div style="flex:1;display:flex;flex-direction:column;gap:2px"><span style="font-size:14.5px;font-weight:800">Share reason</span><span style="font-size:12.5px;color:var(--color-neutral-700)">Off: Colton &amp; Kristin just see "Unavailable"</span></div>
+                  <span style="{{ shareSw.track }}"><span style="{{ shareSw.knob }}"></span></span>
+                </div>
+                <sc-if value="{{ draftConflict }}"><div style="display:flex;gap:8px;align-items:center;font-size:13px;font-weight:700;color:var(--color-accent-800)">{{ ic.alertS }}{{ draftConflictText }}</div></sc-if>
+                <button onClick="{{ saveTimeOff }}" class="btn btn-primary" style="min-height:50px;font-weight:800;font-size:16px">Notify Colton &amp; Kristin</button>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ sh.zelle }}">
+              <div style="display:flex;flex-direction:column;gap:14px">
+                <div style="font-family:var(--font-heading);font-size:26px">Send payment reminder</div>
+                <div style="background:var(--color-surface);border-radius:var(--radius-lg);padding:16px;display:flex;flex-direction:column;gap:8px">
+                  <div style="font-size:12px;font-weight:700;color:var(--color-neutral-700)">To Colton &amp; Kristin · push + text</div>
+                  <div style="font-size:15px;line-height:1.5">Hi! Week of Oct 12 – 16: <b>{{ earn.projH }}</b> × {{ rateLabel }} = <b>{{ earn.projected }}</b>. Zelle to abby.r@gmail.com. Thank you!</div>
+                </div>
+                <sc-for list="{{ earn.adjLines }}" as="al"><div style="font-size:13px;color:var(--color-neutral-700)">{{ al }}</div></sc-for>
+                <button onClick="{{ sendZelle }}" class="btn btn-primary" style="min-height:50px;font-weight:800;font-size:16px;gap:8px">{{ ic.sendS }}Send reminder</button>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ sh.task }}">
+              <div style="display:flex;flex-direction:column;gap:14px">
+                <div style="font-family:var(--font-heading);font-size:26px;line-height:1.1">{{ selTask.title }}</div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap"><span style="{{ selTask.dueStyle }}">{{ ic.clockS }}{{ selTask.due }}</span><span class="tag tag-neutral" style="font-weight:700;font-size:12.5px">{{ selTask.who }}</span></div>
+                <div style="font-size:13px;font-weight:800">Status</div>
+                <div style="display:flex;gap:6px"><sc-for list="{{ selTask.statusChips }}" as="c"><button onClick="{{ c.onClick }}" style="{{ c.style }}">{{ c.l }}</button></sc-for></div>
+                <div style="font-size:13px;font-weight:800">Reminder</div>
+                <div style="display:flex;gap:6px;flex-wrap:wrap"><sc-for list="{{ selTask.remChips }}" as="c"><button onClick="{{ c.onClick }}" style="{{ c.style }}">{{ c.l }}</button></sc-for></div>
+                <button onClick="{{ deleteTask }}" class="btn btn-secondary" style="min-height:46px;font-weight:700;color:var(--color-accent-800)">Delete task</button>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ sh.newTask }}">
+              <div style="display:flex;flex-direction:column;gap:14px">
+                <div style="font-family:var(--font-heading);font-size:26px">New task</div>
+                <input class="input" placeholder="What needs doing?" value="{{ draft.title }}" onChange="{{ dTitle }}" style="min-height:46px;font-size:16px">
+                <div style="display:flex;gap:8px">
+                  <select class="input" value="{{ draft.day }}" onChange="{{ dDay }}" style="min-height:46px;font-size:15px"><sc-for list="{{ dueDays }}" as="o"><option value="{{ o.v }}">{{ o.l }}</option></sc-for></select>
+                  <select class="input" value="{{ draft.t }}" onChange="{{ dT }}" style="min-height:46px;font-size:15px;max-width:120px"><sc-for list="{{ times }}" as="o"><option value="{{ o.v }}">{{ o.l }}</option></sc-for></select>
+                </div>
+                <div style="font-size:13px;font-weight:800">Who</div>
+                <div style="display:flex;gap:6px"><sc-for list="{{ whoChips }}" as="c"><button onClick="{{ c.onClick }}" style="{{ c.style }}">{{ c.l }}</button></sc-for></div>
+                <div style="font-size:13px;font-weight:800">Reminder</div>
+                <div style="display:flex;gap:6px;flex-wrap:wrap"><sc-for list="{{ draftRemChips }}" as="c"><button onClick="{{ c.onClick }}" style="{{ c.style }}">{{ c.l }}</button></sc-for></div>
+                <button onClick="{{ saveTask }}" class="btn btn-primary" style="min-height:50px;font-weight:800;font-size:16px">Add task</button>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ sh.file }}">
+              <div style="display:flex;flex-direction:column;gap:12px">
+                <div style="{{ selFile.style }}"><span style="opacity:.5">{{ selFile.icon }}</span><sc-if value="{{ selFile.isVideo }}"><span style="position:absolute;right:12px;bottom:12px;font-size:12px;font-weight:800;padding:3px 9px;border-radius:9px;background:var(--color-text);color:var(--color-bg)">{{ selFile.dur }}</span></sc-if></div>
+                <div style="font-family:var(--font-heading);font-size:24px">{{ selFile.title }}</div>
+                <div style="font-size:13.5px;color:var(--color-neutral-700)">{{ selFile.meta }}</div>
+                <div style="display:flex"><span class="{{ selFile.shareCls }}" style="font-weight:700;font-size:12.5px">{{ selFile.share }}</span></div>
+                <div style="display:flex;gap:8px">
+                  <button onClick="{{ saveToPhotos }}" class="btn btn-primary" style="flex:1;min-height:46px;font-weight:700">Save to Photos</button>
+                  <sc-if value="{{ selFile.canDelete }}"><button onClick="{{ deleteFile }}" class="btn btn-secondary" style="flex:1;min-height:46px;font-weight:700;color:var(--color-accent-800)">Delete</button></sc-if>
+                </div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ sh.upload }}">
+              <div style="display:flex;flex-direction:column;gap:14px">
+                <div style="font-family:var(--font-heading);font-size:26px">Share a photo or video</div>
+                <div style="display:flex;gap:6px"><sc-for list="{{ kindChips }}" as="c"><button onClick="{{ c.onClick }}" style="{{ c.style }}">{{ c.l }}</button></sc-for></div>
+                <button onClick="{{ pickMedia }}" style="{{ pickStyle }}">{{ ic.upload }}<span style="font-size:14px;font-weight:700">{{ pickLabel }}</span></button>
+                <input class="input" placeholder="Caption" value="{{ draft.title }}" onChange="{{ dTitle }}" style="min-height:46px;font-size:16px">
+                <sc-if value="{{ notNanny }}">
+                  <div style="font-size:13px;font-weight:800">Who can see it</div>
+                  <div style="display:flex;gap:6px"><sc-for list="{{ shareChips }}" as="c"><button onClick="{{ c.onClick }}" style="{{ c.style }}">{{ c.l }}</button></sc-for></div>
+                </sc-if>
+                <button onClick="{{ doUpload }}" class="btn btn-primary" style="min-height:50px;font-weight:800;font-size:16px">Share</button>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ sh.addAcct }}">
+              <div style="display:flex;flex-direction:column;gap:12px">
+                <div style="font-family:var(--font-heading);font-size:26px">Connect a calendar</div>
+                <div style="font-size:14px;line-height:1.45;color:var(--color-neutral-700)">{{ addAcctHint }}</div>
+                <sc-for list="{{ providers }}" as="pv">
+                  <button onClick="{{ pv.onClick }}" style="display:flex;align-items:center;gap:12px;background:var(--color-surface);border:none;border-radius:var(--radius-md);padding:14px 16px;cursor:pointer;text-align:left;color:var(--color-text);min-height:64px">
+                    <span style="{{ pv.badgeStyle }}">{{ pv.badge }}</span>
+                    <span style="flex:1;display:flex;flex-direction:column;gap:2px"><span style="font-size:15.5px;font-weight:800">{{ pv.name }}</span><span style="font-size:12.5px;color:var(--color-neutral-700)">{{ pv.sub }}</span></span>
+                    <span style="color:var(--color-neutral-600)">{{ ic.rightS }}</span>
+                  </button>
+                </sc-for>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+  </x-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;startRole&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;colton&quot;,&quot;kristin&quot;,&quot;abby&quot;],&quot;default&quot;:&quot;colton&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;rate&quot;:{&quot;editor&quot;:&quot;float&quot;,&quot;default&quot;:26,&quot;min&quot;:15,&quot;max&quot;:50,&quot;step&quot;:0.5,&quot;unit&quot;:&quot;$/hr&quot;,&quot;tsType&quot;:&quot;number&quot;},&quot;showGuide&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+const H0=7,H1=22,HH=36,NOW=14+40/60,TODAY=3,RS=7,RE=20;
+const DAYS=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],DL=['M','T','W','T','F','S','S'];
+const HONEY={c:'oklch(0.78 0.12 82)',t:'oklch(0.9 0.07 85)',k:'oklch(0.4 0.08 70)'};
+const P={
+  colton:{name:'Colton',init:'C',c:'var(--color-accent-500)',t:'var(--color-accent-200)',k:'var(--color-accent-900)',roleLabel:'Head of household'},
+  kristin:{name:'Kristin',init:'K',c:'var(--color-accent-2-500)',t:'var(--color-accent-2-200)',k:'var(--color-accent-2-900)',roleLabel:'Head of household'},
+  abby:{name:'Abby',init:'A',...HONEY,roleLabel:'Nanny'},
+  family:{name:'4C Family',init:'4C',c:'var(--color-neutral-700)',t:'var(--color-neutral-300)',k:'var(--color-neutral-900)'}
+};
+P.abbyself={name:'My calendar',c:'var(--color-neutral-600)',t:'var(--color-neutral-300)',k:'var(--color-neutral-900)'};P.shift={name:'Shift',...HONEY};P.off={name:'Time off',c:'var(--color-accent-500)',t:'var(--color-accent-100)',k:'var(--color-accent-900)'};
+const fmt=h=>{const hr=Math.floor(h),m=Math.round((h-hr)*60);return ((hr+11)%12+1)+(m?':'+String(m).padStart(2,'0'):'')+(hr>=12&&hr<24?'p':'a');};
+const rng=(s,e)=>fmt(s)+'–'+fmt(e);
+const hrs=n=>(Math.round(n*100)/100)+'h';
+const money=n=>'$'+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+const money0=n=>'$'+Math.round(n).toLocaleString('en-US');
+const merge=arr=>{const a=[...arr].sort((x,y)=>x.s-y.s),o=[];for(const r of a){const l=o[o.length-1];if(l&&r.s<=l.e)l.e=Math.max(l.e,r.e);else o.push({...r});}return o;};
+const inter=(A,B)=>{const o=[];A.forEach(a=>B.forEach(b=>{const s=Math.max(a.s,b.s),e=Math.min(a.e,b.e);if(e>s)o.push({s,e});}));return merge(o);};
+const sub=(A,B)=>{let g=A.map(r=>({...r}));B.forEach(b=>{const n=[];g.forEach(x=>{if(b.e<=x.s||b.s>=x.e)n.push(x);else{if(b.s>x.s)n.push({s:x.s,e:b.s});if(b.e<x.e)n.push({s:b.e,e:x.e});}});g=n;});return g;};
+const sum=A=>A.reduce((t,r)=>t+r.e-r.s,0);
+const TIMES=[];for(let h=6;h<=23;h+=0.5)TIMES.push({v:String(h),l:fmt(h)});
+const ICONS={
+  cal:[['rect',{x:3,y:4,width:18,height:18,rx:2}],['path',{d:'M8 2v4M16 2v4M3 10h18'}]],
+  baby:[['path',{d:'M9 12h.01M15 12h.01M10 16c.5.3 1.2.5 2 .5s1.5-.2 2-.5'}],['path',{d:'M19 6.3a9 9 0 0 1 1.8 3.9 2 2 0 0 1 0 3.6 9 9 0 0 1-17.6 0 2 2 0 0 1 0-3.6A9 9 0 0 1 12 3c2 0 3.5 1.1 3.5 2.5s-.9 2.5-2 2.5c-.8 0-1.5-.4-1.5-1'}]],
+  tasks:[['path',{d:'M21 10.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h12.5'}],['path',{d:'m9 11 3 3L22 4'}]],
+  image:[['rect',{x:3,y:3,width:18,height:18,rx:2}],['circle',{cx:9,cy:9,r:2}],['path',{d:'m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21'}]],
+  video:[['path',{d:'m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5'}],['rect',{x:2,y:6,width:14,height:12,rx:2}]],
+  sync:[['path',{d:'M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8M21 3v5h-5M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16M8 16H3v5'}]],
+  dollar:[['circle',{cx:12,cy:12,r:10}],['path',{d:'M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8M12 18V6'}]],
+  plus:[['path',{d:'M5 12h14M12 5v14'}]],minus:[['path',{d:'M5 12h14'}]],
+  bell:[['path',{d:'M10.268 21a2 2 0 0 0 3.464 0M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326'}]],
+  left:[['path',{d:'m15 18-6-6 6-6'}]],right:[['path',{d:'m9 18 6-6-6-6'}]],
+  alert:[['path',{d:'m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3M12 9v4M12 17h.01'}]],
+  send:[['path',{d:'M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11zM21.854 2.147l-10.94 10.939'}]],
+  upload:[['path',{d:'M12 3v12M17 8l-5-5-5 5M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'}]],
+  lock:[['rect',{x:3,y:11,width:18,height:11,rx:2}],['path',{d:'M7 11V7a5 5 0 0 1 10 0v4'}]],
+  check:[['path',{d:'M20 6 9 17l-5-5'}]],x:[['path',{d:'M18 6 6 18M6 6l12 12'}]],
+  clock:[['circle',{cx:12,cy:12,r:10}],['path',{d:'M12 6v6l4 2'}]]
+};
+const EVENTS=[
+  {id:1,who:'colton',day:0,s:9,e:10,title:'Standup + planning',src:'Google · FutureBuild work'},
+  {id:2,who:'colton',day:0,s:13,e:14.5,title:'Client review',src:'Google · FutureBuild work'},
+  {id:3,who:'colton',day:1,s:10,e:11.5,title:'Design sync',src:'Google · FutureBuild work'},
+  {id:4,who:'colton',day:2,s:9,e:9.5,title:'Standup',src:'Google · FutureBuild work'},
+  {id:5,who:'colton',day:2,s:15,e:16,title:'1:1 with Sam',src:'Google · FutureBuild work'},
+  {id:6,who:'colton',day:3,s:11,e:12,title:'Site walk',src:'Google · FutureBuild work'},
+  {id:7,who:'colton',day:4,s:9,e:10,title:'Standup',src:'Google · FutureBuild work'},
+  {id:8,who:'colton',day:4,s:14,e:15,title:'Sprint demo',src:'Google · FutureBuild work'},
+  {id:9,who:'kristin',day:0,s:8.5,e:9.5,title:'Team huddle',src:'Google · Work'},
+  {id:10,who:'kristin',day:1,s:13,e:15,title:'Quarterly review',src:'Google · Work'},
+  {id:11,who:'kristin',day:2,s:11,e:12,title:'Dentist',src:'iCloud · Personal'},
+  {id:12,who:'kristin',day:3,s:9,e:10.5,title:'Board prep',src:'Google · Work'},
+  {id:13,who:'kristin',day:3,s:16,e:17,title:'Pilates',src:'iCloud · Personal'},
+  {id:14,who:'kristin',day:4,s:12,e:13,title:'Lunch with Jess',src:'iCloud · Personal'},
+  {id:15,who:'family',day:1,s:17.5,e:18.5,title:'Swim lessons',src:'4C Family'},
+  {id:16,who:'family',day:3,s:18,e:19.5,title:"Dinner at Mom's",src:'4C Family'},
+  {id:17,who:'family',day:5,s:9,e:11,title:'Farmers market',src:'4C Family'},
+  {id:18,who:'family',day:6,s:15,e:17,title:'Birthday party',src:'4C Family'}
+];
+EVENTS.forEach(e=>{e.rec=(e.who==='colton'||e.who==='kristin')&&e.id!==11&&e.id!==14;});
+const ABBYCAL=[{day:0,s:18,e:19,title:'Yoga',rec:true},{day:2,s:18.5,e:20,title:'Evening class',rec:true},{day:3,s:8,e:11.5,title:'Doctor appt'},{day:5,s:15,e:17,title:'Brunch'}];
+const TASKS=[
+  {id:1,title:'Renew car registration',who:'colton',day:2,t:17,rem:'1 day before',status:'todo'},
+  {id:2,title:'Book 4-year checkup',who:'kristin',day:3,t:17,rem:'1h before',status:'todo'},
+  {id:3,title:'Pay HOA dues',who:'both',day:3,t:21,rem:'At time',status:'todo'},
+  {id:4,title:"Order Lily's birthday gift",who:'kristin',day:4,t:12,rem:'1 day before',status:'todo'},
+  {id:5,title:'Schedule gutter cleaning',who:'colton',day:5,t:10,rem:'None',status:'todo'},
+  {id:6,title:'Plan Thanksgiving travel',who:'both',day:18,t:20,rem:'1 day before',status:'doing'},
+  {id:7,title:'Fix garage door sensor',who:'colton',day:6,t:12,rem:'At time',status:'doing'},
+  {id:8,title:'Pay preschool deposit',who:'kristin',day:1,t:12,rem:'None',status:'done'},
+  {id:9,title:'Return Amazon package',who:'colton',day:2,t:18,rem:'None',status:'done'}
+];
+const FILES=[
+  {id:1,kind:'photo',title:'Park picnic',by:'abby',when:'Today',share:'everyone'},
+  {id:2,kind:'video',title:'First bike ride!',by:'abby',when:'Today',share:'everyone',dur:'0:24'},
+  {id:3,kind:'photo',title:'Leaf art project',by:'abby',when:'Yesterday',share:'everyone'},
+  {id:4,kind:'video',title:'Nap routine walkthrough',by:'kristin',when:'Mon',share:'everyone',dur:'0:48'},
+  {id:5,kind:'photo',title:'Insurance cards',by:'kristin',when:'Mon',share:'parents'},
+  {id:6,kind:'photo',title:'Allergy action plan',by:'colton',when:'Oct 9',share:'everyone'},
+  {id:7,kind:'photo',title:'Pediatrician notes',by:'colton',when:'Oct 8',share:'parents'},
+  {id:8,kind:'video',title:'School pickup',by:'abby',when:'Oct 7',share:'everyone',dur:'0:15'},
+  {id:9,kind:'photo',title:'Costume ideas',by:'kristin',when:'Oct 6',share:'everyone'}
+];
+const TINTS=['var(--color-accent-200)','var(--color-accent-2-200)',HONEY.t,'var(--color-neutral-300)','var(--color-accent-300)','var(--color-accent-2-300)'];
+const ACCTS={
+  colton:[{id:'c1',provider:'Google Calendar',email:'colton@futurebuild.ai',cals:[{name:'FutureBuild work',on:true},{name:'Focus time',on:false}]},{id:'c2',provider:'Apple iCloud',email:'Colton’s iCloud',cals:[{name:'Personal',on:true}]}],
+  kristin:[{id:'k1',provider:'Google Calendar',email:'kristin@work.com',cals:[{name:'Work',on:true}]},{id:'k2',provider:'Apple iCloud',email:'Kristin’s iCloud',cals:[{name:'Personal',on:true},{name:'Kids’ school',on:true}]}],
+  abby:[{id:'a1',provider:'Google Calendar',email:'abby.r@gmail.com',cals:[{name:'Personal',on:true},{name:'Classes',on:true}]}]
+};
+const REMS=['None','At time','1h before','1 day before'],REMOFF={'None':null,'At time':0,'1h before':1,'1 day before':24};
+const chip=(on)=>({display:'inline-flex',alignItems:'center',justifyContent:'center',gap:6,minHeight:38,padding:'0 14px',borderRadius:999,fontSize:13.5,fontWeight:700,cursor:'pointer',border:'1.5px solid '+(on?'var(--color-text)':'var(--color-divider)'),background:on?'var(--color-text)':'transparent',color:on?'var(--color-bg)':'var(--color-text)',fontFamily:'inherit',flex:'none'});
+const sw=on=>({track:{width:46,height:28,borderRadius:999,background:on?'var(--color-accent)':'var(--color-neutral-300)',position:'relative',flex:'none',transition:'background .2s'},knob:{position:'absolute',top:3,left:on?21:3,width:22,height:22,borderRadius:'50%',background:'var(--color-bg)',boxShadow:'var(--shadow-sm)',transition:'left .2s'}});
+const dOf=i=>new Date(2026,9,12+i);
+const dLabel=i=>dOf(i).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
+const OFFDATES=[];for(let i=4;i<=110;i++)OFFDATES.push({v:String(i),l:dLabel(i)});
+const dueDayLabel=d=>d===TODAY?'Today':d===TODAY+1?'Tomorrow':d<=6?DAYS[d]:DAYS[d%7]+', Oct '+(12+d);
+
+class Component extends DCLogic {
+  state={
+    role:this.props.startRole||'colton',tab:this.props.startRole==='abby'?'schedule':'calendar',
+    sheet:null,sel:null,draft:{},toast:null,
+    filters:{colton:true,kristin:true,family:true,abby:true,abbyself:true,shift:true,off:true},calView:'week',focus:TODAY,
+    events:EVENTS,
+    needed:{0:[{s:8,e:17.5}],1:[{s:8,e:17.5}],2:[{s:8,e:13}],3:[{s:8,e:17.5}],4:[{s:8,e:15}],5:[],6:[]},
+    avail:{0:[{s:8,e:17}],1:[{s:7.5,e:18}],2:[{s:8,e:18}],3:[{s:12,e:18}],4:[{s:8,e:16}],5:[{s:10,e:14}],6:[]},
+    proposals:[],adj:{0:0.5},
+    timeOff:[{id:1,d:15,end:15,allDay:false,s:8,e:11.5,reason:'Doctor appointment',share:true},{id:2,d:24,end:24,allDay:false,s:13,e:17.5,reason:'Personal',share:false},{id:3,d:45,end:46,allDay:true,s:0,e:24,reason:'Thanksgiving with family',share:true}],
+    invoices:[{id:'oct5',label:'Oct 5 – 9',hours:41,status:'requested',sentAt:'Fri 6:00p'},{id:'sep28',label:'Sep 28 – Oct 2',hours:40,status:'paid'},{id:'sep21',label:'Sep 21 – 25',hours:38,status:'paid'}],
+    tasks:TASKS,files:FILES,fileFilter:'all',accounts:ACCTS,
+    prefs:{mirror:true,notifPay:true,notifTask:true,suggest:true}
+  };
+  icons(){
+    if(this._ic)return this._ic;
+    const mk=(n,sz)=>React.createElement('svg',{width:sz,height:sz,viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:2.75,strokeLinecap:'round',strokeLinejoin:'round',style:{display:'block',flexShrink:0}},...ICONS[n].map(([t,a],i)=>React.createElement(t,{key:i,...a})));
+    const ic={};Object.keys(ICONS).forEach(n=>{ic[n]=mk(n,20);ic[n+'S']=mk(n,15);ic[n+'L']=mk(n,26);ic[n+'XS']=mk(n,12);});
+    return this._ic=ic;
+  }
+  toast(msg){this.setState({toast:msg});clearTimeout(this._t);this._t=setTimeout(()=>this.setState({toast:null}),2400);}
+  componentWillUnmount(){clearTimeout(this._t);}
+  rate(){return this.props.rate??26;}
+  close=()=>this.setState({sheet:null,sel:null});
+  upd=k=>e=>{const v=e.target.value;this.setState(st=>({draft:{...st.draft,[k]:v}}));};
+  setD=patch=>this.setState(st=>({draft:{...st.draft,...patch}}));
+  setRole(r){this.setState(st=>({role:r,sheet:null,sel:null,toast:null,tab:r==='abby'?(['schedule','calendar','earnings','files','settings'].includes(st.tab)?st.tab:'schedule'):(['calendar','nanny','tasks','files','settings'].includes(st.tab)?st.tab:'calendar')}));}
+  openDay(d){const isN=this.state.role==='abby';const arr=(isN?this.state.avail:this.state.needed)[d]||[];this.setState({sheet:'editDay',draft:{day:d,s:String(arr[0]?arr[0].s:8),e:String(arr.length?arr[arr.length-1].e:17),off:!arr.length}});}
+  saveDay=()=>{const d=this.state.draft,s=+d.s,e=+d.e;if(!d.off&&e<=s){this.toast('End time must be after start');return;}const key=this.state.role==='abby'?'avail':'needed';this.setState(st=>({[key]:{...st[key],[d.day]:d.off?[]:[{s,e}]},sheet:null}));this.toast(key==='avail'?'Availability published':'Updated — Abby notified');};
+  sendProposal=()=>{const d=this.state.draft,s=+d.s,e=+d.e;if(e<=s){this.toast('End time must be after start');return;}this.setState(st=>({proposals:[...st.proposals,{id:Date.now(),day:d.day,s,e,note:d.note,status:'pending'}],sheet:null}));this.toast('Sent to Abby');};
+  respond(p,ok){this.setState(st=>({proposals:st.proposals.map(x=>x.id===p.id?{...x,status:ok?'accepted':'declined'}:x),avail:ok?{...st.avail,[p.day]:merge([...(st.avail[p.day]||[]),{s:p.s,e:p.e}])}:st.avail}));this.toast(ok?'Accepted — added to your shifts':'Declined — Colton & Kristin notified');}
+  saveEvent=()=>{const d=this.state.draft,s=+d.s,e=+d.e;if(!(d.title||'').trim()){this.toast('Add a title first');return;}if(e<=s){this.toast('End time must be after start');return;}
+    this.setState(st=>{const needed={...st.needed};if(d.needAbby)needed[d.day]=merge([...(needed[d.day]||[]),{s,e}]);return{events:[...st.events,{id:Date.now(),who:'family',day:d.day,s,e,title:d.title.trim(),src:'4C Family'}],needed,sheet:null};});
+    this.toast(d.needAbby?'Saved · added to nanny schedule':'Saved to 4C Family');};
+  saveTask=()=>{const d=this.state.draft;if(!(d.title||'').trim()){this.toast('Add a task name');return;}this.setState(st=>({tasks:[...st.tasks,{id:Date.now(),title:d.title.trim(),who:d.who,day:+d.day,t:+d.t,rem:d.rem,status:'todo'}],sheet:null}));this.toast(d.rem==='None'?'Task added':'Task added · reminder set');};
+  patchTask(id,patch){this.setState(st=>({tasks:st.tasks.map(t=>t.id===id?{...t,...patch}:t)}));}
+  doUpload=()=>{const d=this.state.draft;if(!d.picked){this.toast('Choose a '+d.kind+' first');return;}const id=Date.now();const share=this.state.role==='abby'?'everyone':d.share;
+    this.setState(st=>({files:[{id,kind:d.kind,title:(d.title||'').trim()||(d.kind==='video'?'New video':'New photo'),by:st.role,when:'Just now',share,dur:d.kind==='video'?'0:12':null,uploading:true},...st.files],sheet:null,fileFilter:'all'}));
+    setTimeout(()=>{this.setState(st=>({files:st.files.map(f=>f.id===id?{...f,uploading:false}:f)}));this.toast(share==='everyone'?'Shared with everyone':'Shared with Colton & Kristin');},1500);};
+  connect(provider){const r=this.state.role,name=P[r].name;this.setState(st=>({accounts:{...st.accounts,[r]:[...st.accounts[r],{id:'n'+Date.now(),provider:provider==='Google'?'Google Calendar':'Apple iCloud',email:provider==='Google'?name.toLowerCase()+'.home@gmail.com':name+'’s iCloud',cals:[{name:'Calendar',on:true},{name:'Birthdays',on:false}]}]},sheet:null}));this.toast(provider+' connected · 2 calendars found');}
+
+  renderVals(){
+    const s=this.state,ic=this.icons(),RATE=this.rate(),role=s.role,isNanny=role==='abby',me=P[role];
+    const tabDefs=isNanny?[['schedule','Schedule','clock'],['calendar','Calendar','cal'],['earnings','Earnings','dollar'],['files','Files','image'],['settings','Sync','sync']]:[['calendar','Calendar','cal'],['nanny','Nanny','baby'],['tasks','Tasks','tasks'],['files','Files','image'],['settings','Sync','sync']];
+    const tabs=tabDefs.map(([id,label,icn])=>{const on=s.tab===id;return{label,icon:ic[icn],onClick:()=>this.setState({tab:id,toast:null}),style:{flex:1,height:54,border:'none',borderRadius:999,background:on?'var(--color-bg)':'transparent',color:on?'var(--color-accent-700)':'var(--color-neutral-700)',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:3,cursor:'pointer',boxShadow:on?'var(--shadow-sm)':'none'}};});
+    const tab={};tabDefs.forEach(([id])=>tab[id]=s.tab===id);
+
+    const roleBtns=['colton','kristin','abby'].map(r=>{const on=r===role,p=P[r];return{name:p.name,init:p.init,sub:p.roleLabel,onClick:()=>this.setRole(r),
+      style:{display:'flex',alignItems:'center',gap:12,padding:'10px 14px',borderRadius:999,cursor:'pointer',textAlign:'left',border:'1.5px solid '+(on?'var(--color-text)':'var(--color-divider)'),background:on?'var(--color-text)':'transparent',color:on?'var(--color-bg)':'var(--color-text)'},
+      avStyle:{width:36,height:36,borderRadius:'50%',background:p.c,color:'var(--color-text)',display:'flex',alignItems:'center',justifyContent:'center',fontWeight:800,fontSize:15,flex:'none'}};});
+
+    // nanny math
+    const rows=[];let totAgreed=0,gapCount=0;
+    const pct=h=>(h-RS)/(RE-RS)*100;
+    const bar=(r,extra)=>({style:{position:'absolute',top:0,bottom:0,left:pct(Math.max(r.s,RS))+'%',width:(pct(Math.min(r.e,RE))-pct(Math.max(r.s,RS)))+'%',borderRadius:999,...extra},label:rng(r.s,r.e)});
+    const agreedByDay={};
+    for(let d=0;d<7;d++){
+      const need=s.needed[d]||[],av=s.avail[d]||[],ag=inter(need,av),gaps=sub(need,av);agreedByDay[d]=ag;
+      const ah=sum(ag);totAgreed+=ah;gapCount+=gaps.length;
+      const props=s.proposals.filter(p=>p.day===d),last=props[props.length-1],pending=props.some(p=>p.status==='pending');
+      const personal=ABBYCAL.filter(x=>x.day===d);
+      const empty=!need.length&&!av.length&&!(isNanny&&personal.length);
+      const st=last?{pending:['Waiting on Abby · '+rng(last.s,last.e),'tag tag-neutral'],accepted:['Abby accepted '+rng(last.s,last.e),'tag tag-accent-2'],declined:['Abby declined '+rng(last.s,last.e),'tag tag-accent']}[last.status]:null;
+      rows.push({dn:DAYS[d],date:'Oct '+(12+d),isToday:d===TODAY,
+        agreedLabel:ah?hrs(ah)+' agreed':(need.length?'':''),
+        isEmpty:empty,notEmpty:!empty,emptyText:isNanny?'Nothing needed — tap to add availability':'No care needed',
+        needBars:need.map(r=>bar(r,{background:'var(--color-accent-300)'})),
+        gapBars:gaps.map(r=>bar(r,{background:'repeating-linear-gradient(135deg, var(--color-accent-600) 0 3px, var(--color-accent-200) 3px 6px)'})),
+        availBars:av.map(r=>bar(r,{background:'oklch(0.85 0.09 85)'})),
+        personalBars:personal.map(r=>bar(r,{background:'var(--color-neutral-300)'})),
+        showPersonal:isNanny&&!empty,personalNote:isNanny&&personal.length>0,personalText:'Your calendar: '+personal.map(x=>x.title+' '+rng(x.s,x.e)).join(' · '),
+        agreedBars:ag.map(r=>{const b=bar(r,{background:'var(--color-accent-2-300)',color:'var(--color-accent-2-900)',fontSize:10.5,fontWeight:800,display:'flex',alignItems:'center',justifyContent:'center',overflow:'hidden',whiteSpace:'nowrap'});if(r.e-r.s<2.5)b.label='';return b;}),
+        hasGaps:gaps.length>0,gapText:(isNanny?'Not covered: ':'Gap: ')+gaps.map(g=>rng(g.s,g.e)).join(', '),
+        showPropose:!isNanny&&gaps.length>0&&!pending,
+        onPropose:e=>{e.stopPropagation();const g=gaps[0];this.setState({sheet:'propose',draft:{day:d,s:String(g.s),e:String(g.e),note:'Could you cover '+rng(g.s,g.e)+' on '+DAYS[d]+'? We’d really appreciate it.'}});},
+        hasStatus:!!st,statusText:st?st[0]:'',statusClass:st?st[1]:'',
+        onEdit:()=>this.openDay(d)});
+    }
+    const nanny={agreedH:hrs(totAgreed),cost:money0((totAgreed+Object.values(s.adj).reduce((a,b)=>a+b,0)*0)*RATE),gapCount:String(gapCount),
+      gapBox:{background:gapCount?'var(--color-accent-200)':'var(--color-accent-2-200)',color:gapCount?'var(--color-accent-900)':'var(--color-accent-2-900)',borderRadius:'var(--radius-md)',padding:12}};
+    const pendingProps=s.proposals.filter(p=>p.status==='pending').map(p=>({when:DAYS[p.day]+' · '+rng(p.s,p.e),note:p.note,onAccept:()=>this.respond(p,true),onDecline:()=>this.respond(p,false)}));
+
+    // earnings
+    let earnedH=0,projH=0;const erows=[],adjLines=[];
+    for(let d=0;d<5;d++){const ag=agreedByDay[d],a=s.adj[d]||0,h=Math.max(0,sum(ag)+a);if(!ag.length&&!a)continue;projH+=h;
+      if(d<TODAY)earnedH+=h;else if(d===TODAY)earnedH+=sum(inter(ag,[{s:0,e:NOW}]));
+      if(a)adjLines.push('Includes '+(a>0?'+':'')+hrs(a)+' adjustment on '+DAYS[d]);
+      erows.push({dn:DAYS[d],status:d<TODAY?'· done':d===TODAY?'· in progress':'· scheduled',sub:ag.map(r=>rng(r.s,r.e)).join(', ')+(a?' · '+(a>0?'+':'')+hrs(a)+' adjusted':''),hours:hrs(h),amount:money0(h*RATE),
+        onMinus:()=>this.setState(st=>({adj:{...st.adj,[d]:Math.max(-sum(agreedByDay[d]),(st.adj[d]||0)-0.25)}})),onPlus:()=>this.setState(st=>({adj:{...st.adj,[d]:(st.adj[d]||0)+0.25}}))});}
+    const sent=s.invoices.some(i=>i.id==='oct12');
+    const histSrc=[{label:'Sep 21',h:38},{label:'Sep 28',h:40},{label:'Oct 5',h:41},{label:'Oct 12',h:projH,cur:true}];
+    const maxH=Math.max(...histSrc.map(x=>x.h),1);
+    const earn={earned:money(earnedH*RATE),earnedH:hrs(Math.round(earnedH*4)/4),projected:money(projH*RATE),projH:hrs(projH),rows:erows,adjLines,
+      barStyle:{height:'100%',width:Math.min(100,projH?earnedH/projH*100:0)+'%',background:'var(--color-accent-2-600)',borderRadius:9},
+      canSend:!sent,reminderText:sent?'Sent today · waiting on Zelle':'Sends automatically Fri, Oct 16 at 6:00p',
+      history:histSrc.map(x=>({label:x.label,amt:money0(x.h*RATE),style:{width:'100%',height:Math.max(6,x.h/maxH*72),borderRadius:12,background:x.cur?'repeating-linear-gradient(135deg, var(--color-accent-2-400) 0 4px, var(--color-accent-2-200) 4px 8px)':'var(--color-accent-2-400)'}})),
+      invoices:s.invoices.map(i=>({label:i.label,hours:hrs(i.hours)+' × $'+RATE,amount:money0(i.hours*RATE),status:i.status==='paid'?'Paid':'Awaiting',cls:i.status==='paid'?'tag tag-accent-2':'tag tag-accent'}))};
+    const payCards=s.invoices.filter(i=>i.status==='requested').map(i=>({label:i.label,hours:hrs(i.hours),amount:money(i.hours*RATE),sentAt:i.sentAt,onPaid:()=>{this.setState(st=>({invoices:st.invoices.map(x=>x.id===i.id?{...x,status:'paid'}:x)}));this.toast('Marked paid — Abby notified');}}));
+
+    // calendar
+    const fl=s.filters,wdOf=i=>((i%7)+7)%7,MINI=-11,MAXI=80;
+    const offOn=i=>s.timeOff.filter(t=>t.d<=i&&i<=t.end);
+    const agreedFor=i=>{let ag=(i>=0&&i<=6)?agreedByDay[i]:inter(s.needed[wdOf(i)]||[],s.avail[wdOf(i)]||[]);offOn(i).forEach(t=>{ag=sub(ag,t.allDay?[{s:0,e:24}]:[{s:t.s,e:t.e}]);});return ag;};
+    const itemsFor=i=>{const wd=wdOf(i),out=[];
+      if(isNanny){
+        if(fl.abbyself)ABBYCAL.filter(x=>x.rec?x.day===wd:x.day===i).forEach(x=>out.push({who:'abbyself',title:x.title,s:x.s,e:x.e,src:'Google · Personal',sel:{type:'personal',idx:i,title:x.title,s:x.s,e:x.e}}));
+        if(fl.shift)agreedFor(i).forEach(r=>out.push({who:'shift',title:'Shift · 4C',s:r.s,e:r.e,src:'Agreed schedule',sel:{type:'cover',idx:i,s:r.s,e:r.e}}));
+      }else{
+        s.events.filter(e=>fl[e.who]&&(e.rec?e.day===wd:e.day===i)).forEach(e=>out.push({who:e.who,title:e.title,s:e.s,e:e.e,src:e.src,sel:{type:'event',id:e.id}}));
+      }
+      if(isNanny?fl.off:fl.abby)offOn(i).forEach(t=>out.push({who:'off',title:isNanny?t.reason:(t.share?'Abby off · '+t.reason:'Abby unavailable'),allDay:t.allDay,s:t.allDay?0:t.s,e:t.allDay?24:t.e,src:'Time off',sel:{type:'off',id:t.id}}));
+      return out.sort((a,b)=>a.s-b.s);};
+    const calFilters=(isNanny?[['abbyself','My calendar'],['shift','Shifts'],['off','Time off']]:[['colton','Colton'],['kristin','Kristin'],['family','4C Family'],['abby','Abby']]).map(([k,l])=>({label:l,onClick:()=>this.setState(st=>({filters:{...st.filters,[k]:!st.filters[k]}})),style:{...chip(false),minHeight:34,padding:'0 12px',fontSize:12.5,background:fl[k]?P[k].t:'transparent',borderColor:fl[k]?'transparent':'var(--color-divider)',color:fl[k]?P[k].k:'var(--color-neutral-600)'},dot:{width:9,height:9,borderRadius:'50%',background:fl[k]?P[k].c:'var(--color-neutral-300)'}}));
+    const view=s.calView,focus=s.focus,ws=focus-wdOf(focus),fd=dOf(focus),wide=view==='day';
+    const colIdx=wide?[focus]:[0,1,2,3,4,5,6].map(k=>ws+k);
+    const offStyle={background:'repeating-linear-gradient(135deg, var(--color-accent-300) 0 4px, var(--color-accent-100) 4px 8px)',color:'var(--color-accent-900)'};
+    const weekHead=[0,1,2,3,4,5,6].map(k=>{const i=ws+k,isT=i===TODAY,isF=wide&&i===focus;return{dl:DL[k],date:String(dOf(i).getDate()),onClick:()=>this.setState({calView:'day',focus:i}),style:{width:28,height:28,borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',fontSize:13,fontWeight:800,background:isT?'var(--color-accent)':isF?'var(--color-text)':'transparent',color:(isT||isF)?'var(--color-bg)':'var(--color-text)',boxShadow:isT&&isF?'0 0 0 2px var(--color-bg), 0 0 0 4px var(--color-text)':'none'}};});
+    const hours=[];for(let h=H0;h<H1;h++)hours.push(h===H0?'':fmt(h));
+    const grid=colIdx.map(i=>{
+      const all=itemsFor(i),evs=all.filter(x=>!x.allDay).sort((a,b)=>a.s-b.s||b.e-a.e).map(x=>({...x}));
+      let cl=[],end=-1;const flush=()=>{const lanes=[];cl.forEach(ev=>{let li=lanes.findIndex(x=>x<=ev.s);if(li<0){li=lanes.length;lanes.push(0);}lanes[li]=ev.e;ev._l=li;});cl.forEach(ev=>ev._n=lanes.length);cl=[];};
+      evs.forEach(ev=>{if(cl.length&&ev.s>=end){flush();end=-1;}cl.push(ev);end=Math.max(end,ev.e);});if(cl.length)flush();
+      const blocks=evs.map(ev=>{const p=P[ev.who],n=ev._n,a=Math.max(ev.s,H0),b=Math.min(ev.e,H1),dur=b-a,multi=n>1&&!wide;
+        return{title:multi?'':ev.title,time:wide?rng(ev.s,ev.e)+' · '+ev.src:fmt(ev.s),showTime:wide?dur>=0.75:(dur>=1.5&&n===1),onClick:()=>this.setState({sheet:'event',sel:ev.sel}),
+          style:{position:'absolute',top:(a-H0)*HH+1,height:Math.max(dur*HH-2,15),left:'calc(7px + (100% - 8px) * '+(ev._l/n)+')',width:'calc((100% - 8px) / '+n+' - 2px)',background:p.t,color:p.k,...(ev.who==='off'?offStyle:{}),borderRadius:wide?10:7,padding:wide?'5px 9px':'3px 4px',overflow:'hidden',fontSize:wide?12.5:9,letterSpacing:wide?'0':'-0.01em',lineHeight:1.2,cursor:'pointer',boxShadow:'0 0 0 1.5px var(--color-bg)',zIndex:2}};});
+      const cover=(!isNanny&&fl.abby)?agreedFor(i).map(r=>({onClick:()=>this.setState({sheet:'event',sel:{type:'cover',idx:i,s:r.s,e:r.e}}),style:{position:'absolute',left:1,width:5,top:(r.s-H0)*HH,height:(r.e-r.s)*HH,background:HONEY.c,borderRadius:4,cursor:'pointer',zIndex:1}})):[];
+      const allDay=all.filter(x=>x.allDay).map(x=>({label:wide?x.title:'Off',onClick:()=>this.setState({sheet:'event',sel:x.sel}),style:{...offStyle,borderRadius:999,fontSize:wide?12.5:9.5,fontWeight:800,padding:wide?'5px 10px':'3px 4px',textAlign:wide?'left':'center',whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis',cursor:'pointer'}}));
+      return{isToday:i===TODAY,blocks,cover,allDay};});
+    const colsTpl='30px repeat('+colIdx.length+',minmax(0,1fr))';
+    const gridStyle={display:'grid',gridTemplateColumns:colsTpl,height:(H1-H0)*HH,position:'relative'};
+    const allDayRow={display:'grid',gridTemplateColumns:colsTpl,paddingBottom:4};
+    const hasAllDay=grid.some(c=>c.allDay.length>0);
+    const nowStyle={position:'absolute',left:0,right:0,top:(NOW-H0)*HH,height:2,background:'var(--color-accent-700)',zIndex:3};
+    const idxOf=dt=>Math.round((dt-dOf(0))/864e5);
+    const mFirst=idxOf(new Date(fd.getFullYear(),fd.getMonth(),1)),mDays=new Date(fd.getFullYear(),fd.getMonth()+1,0).getDate(),mStart=mFirst-wdOf(mFirst),mRows=Math.ceil((wdOf(mFirst)+mDays)/7);
+    const monthCells=[];for(let k=0;k<mRows*7;k++){const i=mStart+k,dt=dOf(i),inM=dt.getMonth()===fd.getMonth();const it=inM?itemsFor(i).filter(x=>x.who!=='shift'):[];const cov=inM&&(isNanny?fl.shift:fl.abby)&&agreedFor(i).length>0;
+      monthCells.push({date:String(dt.getDate()),hasMore:it.length>2,more:'+'+(it.length-2),cover:cov,
+        items:it.slice(0,2).map(x=>({label:x.who==='off'?'Off':x.title,style:{display:'block',fontSize:8.5,fontWeight:700,lineHeight:'14px',height:14,padding:'0 3px',borderRadius:5,background:P[x.who].t,color:P[x.who].k,whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis',...(x.who==='off'?offStyle:{})}})),
+        numStyle:{fontSize:11.5,fontWeight:800,padding:'1px 3px',color:i===TODAY?'var(--color-accent-800)':'var(--color-text)'},
+        cellStyle:{minHeight:78,minWidth:0,borderRadius:12,padding:'4px 3px 5px',display:'flex',flexDirection:'column',gap:2,background:i===TODAY?'var(--color-accent-200)':inM?'var(--color-surface)':'transparent',opacity:inM?1:0.35,cursor:inM?'pointer':'default'},
+        onClick:()=>{if(inM)this.setState({calView:'day',focus:i});}});}
+    const mon=i=>dOf(i).toLocaleDateString('en-US',{month:'short'}),dnum=i=>dOf(i).getDate();
+    const calSub=view==='month'?fd.toLocaleDateString('en-US',{month:'long',year:'numeric'}):wide?fd.toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'}):mon(ws)+' '+dnum(ws)+' – '+(mon(ws)===mon(ws+6)?'':mon(ws+6)+' ')+dnum(ws+6);
+    const oob=()=>this.toast('Prototype covers Oct – Dec 2026');
+    const navStep=dir=>{if(view==='month'){const ti=idxOf(new Date(fd.getFullYear(),fd.getMonth()+dir,1));if(ti<MINI||ti>MAXI){oob();return;}this.setState({focus:ti<=TODAY&&TODAY<ti+31&&dOf(TODAY).getMonth()===dOf(ti).getMonth()?TODAY:ti});return;}
+      const n=focus+(wide?1:7)*dir;if(n<MINI||n>MAXI){oob();return;}this.setState({focus:n});};
+    const viewTabs=[['day','Day'],['week','Week'],['month','Month']].map(([v,l])=>({label:l,onClick:()=>this.setState({calView:v}),style:{flex:1,height:36,border:'none',borderRadius:999,fontSize:13.5,fontWeight:800,cursor:'pointer',background:view===v?'var(--color-bg)':'transparent',color:view===v?'var(--color-text)':'var(--color-neutral-700)',boxShadow:view===v?'var(--shadow-sm)':'none'}}));
+    const showTodayBtn=view==='month'?fd.getMonth()!==dOf(TODAY).getMonth():wide?focus!==TODAY:ws!==TODAY-wdOf(TODAY);
+    const calExtra={calTitle:isNanny?'My calendar':'Family calendar',calSub,viewTabs,notMonth:view!=='month',isMonth:view==='month',gridStyle,allDayRow,hasAllDay,monthCells,monthLegend:isNanny?'Shift':'Abby on duty',showTodayBtn,goToday:()=>this.setState({focus:TODAY}),navPrev:()=>navStep(-1),navNext:()=>navStep(1)};
+
+    // selected event
+    let selEv={};
+    if(s.sheet==='event'&&s.sel){const q=s.sel,dot=c=>({width:12,height:12,borderRadius:'50%',background:c});
+      if(q.type==='cover'){const h=q.e-q.s;selEv={title:isNanny?'Shift':'Abby on duty',src:'Agreed nanny schedule',when:dLabel(q.idx)+' · '+rng(q.s,q.e),note:isNanny?'For Colton & Kristin · '+hrs(h)+' × $'+RATE+' = '+money(h*RATE):'Overlap of when you need care and when Abby is available. Billed at $'+RATE+'/hr.',isCover:true,dot:dot(HONEY.c)};}
+      else if(q.type==='personal'){selEv={title:q.title,src:'Your Google calendar',when:dLabel(q.idx)+' · '+rng(q.s,q.e),note:'Only you can see this. Colton & Kristin only see the availability you publish.',dot:dot(P.abbyself.c)};}
+      else if(q.type==='off'){const t=s.timeOff.find(x=>x.id===q.id);if(t)selEv={title:isNanny||t.share?t.reason:'Abby unavailable',src:isNanny?'Your time off':'Abby’s time off',when:(t.end>t.d?dLabel(t.d)+' – '+dLabel(t.end):dLabel(t.d))+' · '+(t.allDay?'All day':rng(t.s,t.e)),note:isNanny?(t.share?'Shared with Colton & Kristin.':'Colton & Kristin see this as “Unavailable”.'):'Abby let you know ahead of time — plan backup care if you need it.',dot:dot(P.off.c)};}
+      else{const ev=s.events.find(e=>e.id===q.id);if(ev){const p=P[ev.who];selEv={title:ev.title,src:(ev.who==='family'?'':p.name+' · ')+ev.src+(ev.rec?' · repeats weekly':''),when:(ev.rec?DAYS[ev.day]+'s':dLabel(ev.day))+' · '+rng(ev.s,ev.e),note:ev.who==='family'?'Written in 4C · shared with Colton & Kristin and mirrored to your iPhone calendars.':'Synced read-only from '+p.name+'’s calendar. Edit it in the original app.',canDelete:ev.who==='family',dot:dot(p.c)};}}
+    }
+
+    // tasks
+    const nowAbs=TODAY*24+NOW;
+    const taskDue=t=>{const od=t.status!=='done'&&t.day*24+t.t<nowAbs;const kind=t.status==='done'?'done':od?'over':t.day===TODAY?'today':'later';
+      const pal={over:['var(--color-accent-200)','var(--color-accent-900)'],today:[HONEY.t,HONEY.k],later:['var(--color-neutral-200)','var(--color-neutral-800)'],done:['transparent','var(--color-neutral-600)']}[kind];
+      return{label:(od?'Overdue · ':'')+dueDayLabel(t.day)+' '+fmt(t.t),style:{display:'inline-flex',alignItems:'center',gap:4,fontSize:11.5,fontWeight:800,padding:'3px 8px',borderRadius:999,background:pal[0],color:pal[1]},kind};};
+    const avStyle=w=>({width:22,height:22,borderRadius:'50%',background:P[w].c,color:'var(--color-text)',fontSize:10.5,fontWeight:800,display:'flex',alignItems:'center',justifyContent:'center',marginLeft:-4,boxShadow:'0 0 0 2px var(--color-bg)'});
+    const taskCols=[['todo','To do'],['doing','In progress'],['done','Done']].map(([id,name])=>{const list=s.tasks.filter(t=>t.status===id).sort((a,b)=>a.day*24+a.t-(b.day*24+b.t));return{name,count:String(list.length),cards:list.map(t=>{const du=taskDue(t),done=t.status==='done';return{title:t.title,due:du.label,dueStyle:du.style,hasRem:t.rem!=='None'&&!done,
+      avs:(t.who==='both'?['colton','kristin']:[t.who]).map(w=>({init:P[w].init,style:avStyle(w)})),
+      titleStyle:{fontSize:14.5,fontWeight:700,lineHeight:1.3,textDecoration:done?'line-through':'none',color:done?'var(--color-neutral-600)':'var(--color-text)'},
+      checkIcon:done?ic.checkXS:null,checkStyle:{width:24,height:24,flex:'none',borderRadius:'50%',border:'2px solid '+(done?'var(--color-accent-2-600)':'var(--color-neutral-400)'),background:done?'var(--color-accent-2-600)':'transparent',color:'var(--color-bg)',display:'flex',alignItems:'center',justifyContent:'center',padding:0,cursor:'pointer',marginTop:1},
+      onCheck:e=>{e.stopPropagation();this.patchTask(t.id,{status:done?'todo':'done'});if(!done)this.toast('Done — nice');},
+      onOpen:()=>this.setState({sheet:'task',sel:{id:t.id}})};})};});
+    const open=s.tasks.filter(t=>t.status!=='done');const over=open.filter(t=>taskDue(t).kind==='over').length,today=open.filter(t=>taskDue(t).kind==='today').length;
+    let nxt=null;open.forEach(t=>{const o=REMOFF[t.rem];if(o==null)return;const at=t.day*24+t.t-o;if(at>=nowAbs&&(!nxt||at<nxt.at))nxt={at,t};});
+    const taskSum={counts:[over?over+' overdue':null,today?today+' due today':null,open.length+' open'].filter(Boolean).join(' · '),next:nxt?'Next reminder '+dueDayLabel(Math.floor(nxt.at/24)).toLowerCase()+' '+fmt(nxt.at%24)+' · '+nxt.t.title:'No reminders coming up'};
+    let selTask={};
+    if(s.sheet==='task'&&s.sel){const t=s.tasks.find(x=>x.id===s.sel.id);if(t){const du=taskDue(t);selTask={title:t.title,due:du.label,dueStyle:{...du.style,fontSize:12.5,padding:'4px 10px'},who:t.who==='both'?'Colton & Kristin':P[t.who].name,
+      statusChips:[['todo','To do'],['doing','In progress'],['done','Done']].map(([v,l])=>({l,style:chip(t.status===v),onClick:()=>this.patchTask(t.id,{status:v})})),
+      remChips:REMS.map(r=>({l:r,style:chip(t.rem===r),onClick:()=>this.patchTask(t.id,{rem:r})}))};}}
+    const dr=s.draft||{};
+    const dueDays=[];for(let d=TODAY;d<=TODAY+10;d++)dueDays.push({v:String(d),l:dueDayLabel(d)+(d<=6&&d>TODAY+1?', Oct '+(12+d):'')});
+
+    // files
+    const visible=s.files.filter(f=>!isNanny||f.share==='everyone');
+    const fileTiles=visible.filter(f=>s.fileFilter==='all'||f.kind===s.fileFilter).map(f=>{const i=s.files.indexOf(f);return{title:f.title,meta:P[f.by].name+' · '+f.when,isVideo:f.kind==='video',dur:f.dur,isPrivate:f.share==='parents',uploading:!!f.uploading,icon:f.kind==='video'?ic.videoL:ic.imageL,
+      style:{position:'relative',aspectRatio:'1',borderRadius:'var(--radius-md)',background:TINTS[f.id%TINTS.length],display:'flex',alignItems:'center',justifyContent:'center',overflow:'hidden',color:'var(--color-neutral-900)'},onOpen:()=>!f.uploading&&this.setState({sheet:'file',sel:{id:f.id}})};});
+    const fileTabs=[['all','All'],['photo','Photos'],['video','Videos']].map(([v,l])=>({label:l,style:{...chip(s.fileFilter===v),minHeight:34},onClick:()=>this.setState({fileFilter:v})}));
+    let selFile={};
+    if(s.sheet==='file'&&s.sel){const f=s.files.find(x=>x.id===s.sel.id);if(f)selFile={title:f.title,meta:'Shared by '+P[f.by].name+' · '+f.when,isVideo:f.kind==='video',dur:f.dur,icon:f.kind==='video'?ic.videoL:ic.imageL,share:f.share==='everyone'?'Visible to everyone':'Colton & Kristin only',shareCls:f.share==='everyone'?'tag tag-accent-2':'tag tag-neutral',canDelete:f.by===role,
+      style:{position:'relative',aspectRatio:'4 / 3',borderRadius:'var(--radius-lg)',background:TINTS[f.id%TINTS.length],display:'flex',alignItems:'center',justifyContent:'center'}};}
+
+    // settings
+    const accounts=(s.accounts[role]||[]).map((a,ai)=>({provider:a.provider,email:a.email,badge:a.provider.startsWith('Google')?'G':'i',
+      badgeStyle:{width:36,height:36,borderRadius:'50%',flex:'none',display:'flex',alignItems:'center',justifyContent:'center',fontWeight:800,fontSize:16,background:a.provider.startsWith('Google')?'var(--color-accent-200)':'var(--color-neutral-300)',color:'var(--color-text)'},
+      cals:a.cals.map((c,ci)=>({name:c.name,...sw(c.on),onToggle:()=>this.setState(st=>({accounts:{...st.accounts,[role]:st.accounts[role].map((x,xi)=>xi!==ai?x:{...x,cals:x.cals.map((y,yi)=>yi!==ci?y:{...y,on:!y.on})})}}))}))}));
+    const pr=(k,name,sub)=>({name,sub,...sw(s.prefs[k]),onToggle:()=>this.setState(st=>({prefs:{...st.prefs,[k]:!st.prefs[k]}}))});
+    const prefRows=isNanny?[pr('suggest','Suggest availability from my calendar','Pre-fills free time; you still choose what to publish'),pr('notifTask','Schedule requests','When Colton or Kristin ask you to cover time')]
+      :[pr('mirror','Mirror 4C events to my iPhone','Events you write here appear in Apple Calendar'),pr('notifPay','Payment requests from Abby','Friday evening Zelle reminders'),pr('notifTask','Task reminders','Push notifications at each task’s reminder time')];
+    const providers=['Google','Apple'].map(p=>({name:p==='Google'?'Google Calendar':'Apple iCloud Calendar',sub:p==='Google'?'Work or personal Google accounts':'Sign in with your Apple ID',badge:p==='Google'?'G':'i',
+      badgeStyle:{width:40,height:40,borderRadius:'50%',flex:'none',display:'flex',alignItems:'center',justifyContent:'center',fontWeight:800,fontSize:17,background:p==='Google'?'var(--color-accent-200)':'var(--color-neutral-300)'},onClick:()=>this.connect(p)}));
+
+    const offConflict=t=>{let h=0;for(let i=t.d;i<=t.end;i++){const need=s.needed[i%7]||[];h+=sum(t.allDay?need:inter(need,[{s:t.s,e:t.e}]));}return h;};
+    const timeOff=[...s.timeOff].sort((a,b)=>a.d-b.d).map(t=>{const c=offConflict(t),dt=dOf(t.d);return{
+      mon:dt.toLocaleDateString('en-US',{month:'short'}),day:String(dt.getDate()),
+      reason:isNanny||t.share?t.reason:'Unavailable',
+      when:(t.end>t.d?dLabel(t.d)+' – '+dLabel(t.end):dLabel(t.d))+' · '+(t.allDay?'All day':rng(t.s,t.e))+(isNanny&&!t.share?' · reason private':''),
+      conflict:c?(isNanny?'Overlaps '+hrs(c)+' of usual care':'Needs backup care · '+hrs(c)):'No conflict with usual schedule',cls:c?'tag tag-accent':'tag tag-accent-2',
+      onRemove:()=>{this.setState(st=>({timeOff:st.timeOff.filter(x=>x.id!==t.id)}));this.toast('Time off removed');}};});
+    const dOff={d:+dr.d,end:+dr.end,allDay:!!dr.allDay,s:+dr.s,e:+dr.e};const dc=s.sheet==='timeOff'?offConflict(dOff):0;
+    const fabMap={calendar:isNanny?()=>this.setState({sheet:'timeOff',draft:{d:'15',end:'15',allDay:false,s:'9',e:'12',reason:'',share:true}}):()=>this.setState({sheet:'newEvent',draft:{title:'',day:5,s:'18',e:'22',needAbby:false}}),tasks:()=>this.setState({sheet:'newTask',draft:{title:'',day:String(TODAY+1),t:'18',rem:'1h before',who:'both'}}),files:()=>this.setState({sheet:'upload',draft:{kind:'photo',title:'',share:'everyone',picked:false}})};
+    const sheetEdit=s.sheet==='editDay'?{kicker:DAYS[dr.day]+', Oct '+(12+dr.day),title:isNanny?'When are you free?':'When do you need Abby?',offLabel:isNanny?'Not available this day':'No care needed this day',hint:isNanny?'Colton & Kristin see only this window — not why.':'Abby will see the change and the overlap updates instantly.',cta:isNanny?'Publish availability':'Save'}:{};
+
+    return{
+      timeOff,noTimeOff:!timeOff.length,offTitle:isNanny?'Your time off':'Abby’s time off',offSub:isNanny?'Let the family know weeks ahead':'Upcoming dates Abby can’t work',
+      openTimeOff:()=>this.setState({sheet:'timeOff',draft:{d:'15',end:'15',allDay:false,s:'9',e:'12',reason:'',share:true}}),
+      offDates:OFFDATES,offEndDates:OFFDATES.filter(o=>+o.v>=+dr.d&&+o.v<=+dr.d+21),
+      dOffD:e=>{const v=e.target.value;this.setD({d:v,end:+dr.end<+v?v:dr.end});},dOffEnd:this.upd('end'),dReason:this.upd('reason'),
+      allDaySw:sw(!!dr.allDay),draftAllDay:!!dr.allDay,draftPartDay:!dr.allDay,toggleAllDay:()=>this.setD({allDay:!dr.allDay,end:dr.d}),
+      shareSw:sw(!!dr.share),toggleShare:()=>this.setD({share:!dr.share}),
+      draftConflict:dc>0,draftConflictText:'Overlaps '+hrs(dc)+' of usual care — they’ll be asked to arrange backup',
+      saveTimeOff:()=>{const d=this.state.draft;if(!d.allDay&&+d.e<=+d.s){this.toast('End time must be after start');return;}this.setState(st=>({timeOff:[...st.timeOff,{id:Date.now(),d:+d.d,end:d.allDay?Math.max(+d.end,+d.d):+d.d,allDay:!!d.allDay,s:+d.s,e:+d.e,reason:(d.reason||'').trim()||'Unavailable',share:!!d.share}],sheet:null}));this.toast('Colton & Kristin notified');},
+      ic,roleBtns,showGuide:this.props.showGuide??true,tabs,tab,isNanny,notNanny:!isNanny,me,
+      abbyLabel:isNanny?'You':'Abby',rateLabel:'$'+RATE+'/hr',
+      showDays:(tab.nanny||tab.schedule)||false,dayRows:rows,nanny,pendingProps,payCards,earn,
+      openZelleApp:()=>this.toast('Opening Zelle…'),openZelleSheet:()=>this.setState({sheet:'zelle'}),
+      sendZelle:()=>{this.setState(st=>({invoices:[{id:'oct12',label:'Oct 12 – 16',hours:projH,status:'requested',sentAt:'Today 2:40p'},...st.invoices],sheet:null}));this.toast('Reminder sent to Colton & Kristin');},
+      calFilters,weekHead,hours,grid,nowStyle,...calExtra,weekNav:()=>this.toast('Prototype shows this week only'),
+      taskCols,taskSum,selTask,deleteTask:()=>{this.setState(st=>({tasks:st.tasks.filter(t=>t.id!==st.sel.id),sheet:null}));this.toast('Task deleted');},
+      dueDays,whoChips:[['colton','Colton'],['kristin','Kristin'],['both','Both']].map(([v,l])=>({l,style:chip(dr.who===v),onClick:()=>this.setD({who:v})})),
+      draftRemChips:REMS.map(r=>({l:r,style:chip(dr.rem===r),onClick:()=>this.setD({rem:r})})),
+      filesSub:isNanny?'Shared with you by the family':'Photos & short videos',fileTabs,fileTiles,selFile,
+      saveToPhotos:()=>{this.close();this.toast('Saved to Photos');},deleteFile:()=>{this.setState(st=>({files:st.files.filter(f=>f.id!==st.sel.id),sheet:null}));this.toast('Deleted');},
+      kindChips:[['photo','Photo'],['video','Video']].map(([v,l])=>({l,style:chip(dr.kind===v),onClick:()=>this.setD({kind:v,picked:false})})),
+      shareChips:[['everyone','Everyone'],['parents','Colton & Kristin']].map(([v,l])=>({l,style:chip(dr.share===v),onClick:()=>this.setD({share:v})})),
+      pickMedia:()=>this.setD({picked:true}),pickLabel:dr.picked?'1 '+dr.kind+' selected · tap to change':'Choose from Photos',
+      pickStyle:{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:8,height:120,borderRadius:'var(--radius-lg)',border:'2px dashed '+(dr.picked?'var(--color-accent-2-600)':'var(--color-neutral-400)'),background:dr.picked?'var(--color-accent-2-200)':'transparent',color:'var(--color-text)',cursor:'pointer'},
+      doUpload:this.doUpload,
+      accounts,prefRows,providers,openAddAcct:()=>this.setState({sheet:'addAcct'}),
+      addAcctHint:isNanny?'Your events stay private. 4C only uses them to suggest when you’re free.':'Events sync read-only into the shared week. Abby never sees them.',
+      fab:{show:!!fabMap[s.tab],onClick:fabMap[s.tab]||(()=>{})},
+      hasToast:!!s.toast,toast:s.toast,
+      sheetOpen:!!s.sheet,closeSheet:this.close,
+      sh:{event:s.sheet==='event',newEvent:s.sheet==='newEvent',editDay:s.sheet==='editDay',propose:s.sheet==='propose',timeOff:s.sheet==='timeOff',zelle:s.sheet==='zelle',task:s.sheet==='task',newTask:s.sheet==='newTask',file:s.sheet==='file',upload:s.sheet==='upload',addAcct:s.sheet==='addAcct'},
+      selEv,deleteEvent:()=>{this.setState(st=>({events:st.events.filter(e=>e.id!==st.sel.id),sheet:null}));this.toast('Event deleted');},
+      goNanny:()=>this.setState({tab:isNanny?'schedule':'nanny',sheet:null,sel:null}),
+      draft:dr,times:TIMES,editDay:sheetEdit,
+      dTitle:this.upd('title'),dS:this.upd('s'),dE:this.upd('e'),dNote:this.upd('note'),dDay:this.upd('day'),dT:this.upd('t'),
+      dayChips:DL.map((l,d)=>({l,style:{...chip(dr.day===d),width:40,padding:0,flex:1,minHeight:40},onClick:()=>this.setD({day:d})})),
+      needSw:sw(!!dr.needAbby),toggleNeedAbby:()=>this.setD({needAbby:!dr.needAbby}),
+      offSw:sw(!!dr.off),toggleOff:()=>this.setD({off:!dr.off}),
+      saveEvent:this.saveEvent,saveDay:this.saveDay,sendProposal:this.sendProposal,saveTask:this.saveTask
+    };
+  }
+}
+</script>
+</body>
+</html>
